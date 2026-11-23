@@ -7,30 +7,32 @@
 <style>
 :root{--bg:#070b14;--surface:#111827;--surface-2:#172033;--border:#27344e;--text:#f1f5f9;--muted:#94a3b8;--accent:#38bdf8;--accent-2:#22d3ee;--good:#22c55e;--mod:#f59e0b;--poor:#f97316;--severe:#ef4444;--r:14px}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(circle at 15% 0%,rgba(56,189,248,.16),transparent 38%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.45;min-height:100vh}
+body{margin:0;background:radial-gradient(circle at 15% 0%,rgba(56,189,248,.16),transparent 40%),radial-gradient(circle at 88% 12%,rgba(34,211,238,.08),transparent 34%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.45;min-height:100vh}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-@keyframes riseIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@keyframes softPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.86)}}
+@keyframes riseIn{from{opacity:0;transform:translateY(12px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes softPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.82)}}
 @keyframes sheen{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-.anim{animation:riseIn .38s cubic-bezier(.22,1,.36,1) both}
-.anim-d1{animation-delay:.05s}
-.anim-d2{animation-delay:.1s}
-.anim-d3{animation-delay:.15s}
-.dot-live{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent-2);margin-right:6px;animation:softPulse 2s ease-in-out infinite}
-@media(prefers-reduced-motion:reduce){.anim,.anim-d1,.anim-d2,.anim-d3,.dot-live{animation:none}}
+@keyframes popValue{0%{transform:translateY(4px);opacity:.55}100%{transform:translateY(0);opacity:1}}
+.anim{animation:riseIn .42s cubic-bezier(.16,1,.3,1) both}
+.anim-d1{animation-delay:.06s}
+.anim-d2{animation-delay:.12s}
+.anim-d3{animation-delay:.18s}
+.pop{animation:popValue .24s cubic-bezier(.16,1,.3,1) both}
+.dot-live{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent-2);margin-right:6px;box-shadow:0 0 8px rgba(34,211,238,.7);animation:softPulse 2.1s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){.anim,.anim-d1,.anim-d2,.anim-d3,.pop,.dot-live{animation:none}}
 .wrap{max-width:1080px;margin:0 auto;padding:16px 14px 56px}
-.bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:14px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
 .tag{display:inline-flex;align-items:center;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);background:rgba(56,189,248,.14);border:1px solid rgba(56,189,248,.35);padding:3px 9px;border-radius:999px;margin-bottom:6px}
-h1{margin:0;font-size:1.5rem;font-weight:800}
+h1{margin:0;font-size:1.5rem;font-weight:800;letter-spacing:-.01em}
 .sub{margin:2px 0 0;color:var(--muted);font-size:.88rem}
 .row{display:flex;flex-wrap:wrap;gap:8px}
-button{font-family:inherit;font-size:.85rem;font-weight:600;color:var(--text);background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;cursor:pointer;transition:transform .16s ease,border-color .18s ease,background-color .18s ease,box-shadow .18s ease}
-button:hover{border-color:var(--accent);transform:translateY(-1px)}
-button:active{transform:translateY(0)}
+button{font-family:inherit;font-size:.85rem;font-weight:600;color:var(--text);background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;cursor:pointer;transition:transform .18s cubic-bezier(.16,1,.3,1),border-color .18s ease,background-color .18s ease,box-shadow .18s ease}
+button:hover{border-color:var(--accent);transform:translateY(-1.5px);box-shadow:0 4px 12px rgba(0,0,0,.22)}
+button:active{transform:translateY(0) scale(.99)}
 button.pri{background:linear-gradient(135deg,#0284c7,#0ea5e9,#06b6d4);background-size:200% 200%;animation:sheen 6s ease infinite;border-color:#7dd3fc;color:#fff}
 button.on{border-color:var(--accent);box-shadow:0 0 0 1px rgba(56,189,248,.35)}
 .drawer{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:14px}
-.drawer.open{display:block;animation:riseIn .24s ease both}
+.drawer.open{display:block;animation:riseIn .26s cubic-bezier(.16,1,.3,1) both}
 .head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
 .head h2{margin:0;font-size:1rem}
 .pill{font-size:.76rem;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:#cbd5e1;transition:background-color .2s ease,border-color .2s ease}
@@ -38,12 +40,13 @@ button.on{border-color:var(--accent);box-shadow:0 0 0 1px rgba(56,189,248,.35)}
 .pill.warn{background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.45);color:#fde68a}
 .grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:14px;margin-bottom:14px}
 @media(max-width:840px){.grid2{grid-template-columns:1fr}}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;transition:border-color .22s ease,box-shadow .22s ease}
+.card:hover{border-color:rgba(56,189,248,.35)}
 .chip{font-family:monospace;font-size:.76rem;color:var(--accent-2);background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.28);padding:3px 8px;border-radius:999px}
 .search-box{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:12px}
 .search-row{display:flex;gap:8px;margin-top:6px}
-input[type=search],input[type=password],select{width:100%;background:#090e1a;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:.86rem;font-family:inherit;transition:border-color .18s ease}
-input[type=search]:focus,input[type=password]:focus,select:focus{border-color:var(--accent);outline:none}
+input[type=search],input[type=password],select{width:100%;background:#090e1a;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:.86rem;font-family:inherit;transition:border-color .18s ease,box-shadow .18s ease}
+input[type=search]:focus,input[type=password]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(56,189,248,.18);outline:none}
 input[type=password]{flex:1 1 220px;width:auto}
 .results{display:flex;flex-direction:column;gap:6px;margin-top:8px;max-height:220px;overflow-y:auto}
 .res-item{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;width:100%;padding:8px 10px;background:#0c1220;border:1px solid var(--border);border-radius:8px}
@@ -52,7 +55,7 @@ input[type=password]{flex:1 1 220px;width:auto}
 .cities{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
 @media(max-width:440px){.cities{grid-template-columns:1fr}}
 .city{text-align:left;display:flex;flex-direction:column;gap:2px;padding:10px 12px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px}
-.city.sel{border-color:var(--accent);background:rgba(56,189,248,.16);box-shadow:0 0 0 1px rgba(56,189,248,.25)}
+.city.sel{border-color:var(--accent);background:rgba(56,189,248,.16);box-shadow:0 0 0 1px rgba(56,189,248,.28)}
 .city b{font-size:.92rem}
 .city small{color:var(--muted);font-size:.78rem}
 .box{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:12px}
@@ -63,39 +66,39 @@ input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
 .tog{font-size:.8rem;padding:6px 10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:#cbd5e1}
 .tog[aria-pressed="true"]{background:rgba(56,189,248,.16);border-color:var(--accent);color:#e0f2fe;font-weight:700}
 .banner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:12px;transition:border-color .2s ease}
-.num{font-size:2.2rem;font-weight:800;line-height:1;transition:transform .2s ease}
+.num{font-size:2.2rem;font-weight:800;line-height:1}
 .tier{font-size:.75rem;font-weight:800;padding:4px 9px;border-radius:999px;text-transform:uppercase;transition:background-color .2s ease,color .2s ease}
 .t-good{background:rgba(34,197,94,.16);color:#86efac}
 .t-mod{background:rgba(245,158,11,.16);color:#fde68a}
 .t-poor{background:rgba(249,115,22,.16);color:#fdba74}
 .t-sev{background:rgba(239,68,68,.18);color:#fca5a5}
 .pols{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
-.pol{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:9px 11px;transition:transform .16s ease,border-color .18s ease}
-.pol:hover{border-color:rgba(56,189,248,.45);transform:translateY(-1px)}
+.pol{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:9px 11px;transition:transform .18s cubic-bezier(.16,1,.3,1),border-color .18s ease}
+.pol:hover{border-color:rgba(56,189,248,.5);transform:translateY(-2px)}
 .pol small{display:block;font-size:.72rem;color:var(--muted);text-transform:uppercase}
 .pol b{font-size:1rem}
 .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 @media(max-width:480px){.kpis{grid-template-columns:1fr}}
-.kpi{background:#0c1220;border:1px solid var(--border);border-radius:10px;padding:10px;transition:border-color .18s ease}
-.kpi:hover{border-color:rgba(56,189,248,.35)}
+.kpi{background:#0c1220;border:1px solid var(--border);border-radius:10px;padding:10px;transition:border-color .18s ease,transform .18s ease}
+.kpi:hover{border-color:rgba(56,189,248,.4);transform:translateY(-1px)}
 .kpi small{display:block;font-size:.74rem;color:var(--muted);margin-bottom:2px}
 .kpi b{font-size:.96rem;color:var(--accent-2)}
 .hours{display:grid;grid-template-columns:repeat(12,1fr);gap:5px;margin-top:8px}
 @media(max-width:760px){.hours{grid-template-columns:repeat(6,1fr)}}
 @media(max-width:420px){.hours{grid-template-columns:repeat(4,1fr)}}
-.hr{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:6px 4px;text-align:center;font-size:.72rem;transition:transform .16s ease,border-color .16s ease}
-.hr:hover{transform:translateY(-2px);border-color:rgba(56,189,248,.4)}
+.hr{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:6px 4px;text-align:center;font-size:.72rem;transition:transform .18s cubic-bezier(.16,1,.3,1),border-color .18s ease}
+.hr:hover{transform:translateY(-2px);border-color:rgba(56,189,248,.45)}
 .hr.safe{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.55)}
 .hr.peak{background:rgba(239,68,68,.14);border-color:rgba(239,68,68,.45)}
 .hr b{display:block;margin-top:2px;font-size:.78rem}
 ul.list{margin:8px 0 0;padding-left:18px;color:#cbd5e1;font-size:.88rem}
 ul.list li{margin-bottom:6px}
 .ai{display:none;background:rgba(56,189,248,.09);border:1px solid rgba(56,189,248,.32);border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:.86rem;color:#e0f2fe}
-.ai.show{display:block;animation:riseIn .22s ease both}
+.ai.show{display:block;animation:riseIn .24s cubic-bezier(.16,1,.3,1) both}
 .prec-box{margin-top:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
 .prec-title{font-size:.8rem;font-weight:700;color:var(--accent);margin-bottom:4px}
 .checks{display:flex;flex-direction:column;gap:7px}
-.chk{display:flex;align-items:flex-start;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:.84rem;cursor:pointer;transition:transform .15s ease,border-color .16s ease,background-color .16s ease}
+.chk{display:flex;align-items:flex-start;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:.84rem;cursor:pointer;transition:transform .16s ease,border-color .16s ease,background-color .18s ease}
 .chk:hover{border-color:rgba(56,189,248,.45);transform:translateX(2px)}
 .chk input{margin-top:2px;accent-color:var(--good)}
 .chk.done{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.35)}
@@ -168,9 +171,9 @@ ul.list li{margin-bottom:6px}
 </div>
 
 <div class="search-box">
-<label for="placeSearch" class="lbl">Search Any Indian City, District or State (Kannur, Varanasi, Hyderabad, etc.)</label>
+<label for="placeSearch" class="lbl">Search Any Indian City, District or State (Trivandrum, Kannur, Varanasi, Hyderabad)</label>
 <div class="search-row">
-<input type="search" id="placeSearch" placeholder="Type Kannur, Varanasi, Hyderabad, Thane, Patna..." autocomplete="off" oninput="window.__vs.renderSearch()" onkeydown="if(event.key==='Enter'){event.preventDefault();window.__vs.searchGo()}">
+<input type="search" id="placeSearch" placeholder="Type Trivandrum, Kannur, Varanasi, Hyderabad..." autocomplete="off" oninput="window.__vs.renderSearch()" onkeydown="if(event.key==='Enter'){event.preventDefault();window.__vs.searchGo()}">
 <button type="button" id="btnSearchGo" class="pri" onclick="window.__vs.searchGo()">Search</button>
 </div>
 <div id="searchResults" class="results" role="region" aria-label="Search Results"></div>
@@ -228,7 +231,7 @@ ul.list li{margin-bottom:6px}
 <button type="button" id="btnAi" onclick="window.__vs.runAi()">Enrich with Gemini 3 Flash</button>
 <button type="button" id="btnCopy" onclick="window.__vs.copyAlert()">Copy Family Health Alert</button>
 </div>
-<p id="statusMsg" class="sub" style="margin-top:8px" role="status" aria-live="polite">Ready — type any Indian city or district to search and tap a result.</p>
+<p id="statusMsg" class="sub" style="margin-top:8px" role="status" aria-live="polite">Ready — search any Indian city or district and tap a result.</p>
 </section>
 
 <section class="card anim anim-d2" aria-label="Live Air Index">
@@ -296,87 +299,87 @@ ul.list li{margin-bottom:6px}
 const KEY_STORE="vayushield_v21_key";
 const MODEL="gemini-3-flash-preview";
 const DIRECTORY=[
-{name:"New Delhi",region:"Delhi NCR",aqi:385,temp:24,smog:"Severe Smog"},
-{name:"Gurugram, Haryana",region:"Delhi NCR District",aqi:342,temp:24,smog:"Severe Smog"},
-{name:"Noida, Uttar Pradesh",region:"Delhi NCR District",aqi:356,temp:24,smog:"Severe Smog"},
-{name:"Faridabad, Haryana",region:"Delhi NCR District",aqi:328,temp:25,smog:"Severe Smog"},
-{name:"Ghaziabad, Uttar Pradesh",region:"Delhi NCR District",aqi:364,temp:24,smog:"Severe Smog"},
-{name:"Mumbai, Maharashtra",region:"Mumbai Suburban & City",aqi:168,temp:30,smog:"Light Haze"},
-{name:"Thane, Maharashtra",region:"Konkan District",aqi:154,temp:30,smog:"Light Haze"},
-{name:"Navi Mumbai, Maharashtra",region:"Konkan District",aqi:162,temp:30,smog:"Light Haze"},
-{name:"Pune, Maharashtra",region:"Pune District",aqi:96,temp:26,smog:"Clear Air"},
-{name:"Nagpur, Maharashtra",region:"Vidarbha District",aqi:124,temp:28,smog:"Light Haze"},
-{name:"Nashik, Maharashtra",region:"North Maharashtra District",aqi:88,temp:26,smog:"Clear Air"},
-{name:"Chhatrapati Sambhajinagar, Maharashtra",region:"Marathwada District",aqi:104,temp:28,smog:"Light Haze"},
-{name:"Kannur, Kerala",region:"Malabar District",aqi:68,temp:29,smog:"Clear Air"},
-{name:"Kochi, Kerala",region:"Ernakulam District",aqi:64,temp:30,smog:"Clear Air"},
-{name:"Thiruvananthapuram, Kerala",region:"Capital District",aqi:58,temp:30,smog:"Clear Air"},
-{name:"Kozhikode, Kerala",region:"Malabar District",aqi:66,temp:29,smog:"Clear Air"},
-{name:"Thrissur, Kerala",region:"Central Kerala District",aqi:62,temp:29,smog:"Clear Air"},
-{name:"Alappuzha, Kerala",region:"Coastal District",aqi:56,temp:30,smog:"Clear Air"},
-{name:"Palakkad, Kerala",region:"Palakkad Gap District",aqi:72,temp:31,smog:"Clear Air"},
-{name:"Kollam, Kerala",region:"Coastal District",aqi:60,temp:30,smog:"Clear Air"},
-{name:"Bengaluru, Karnataka",region:"Bengaluru Urban District",aqi:74,temp:25,smog:"Clear Air"},
-{name:"Mysuru, Karnataka",region:"Mysuru District",aqi:69,temp:26,smog:"Clear Air"},
-{name:"Mangaluru, Karnataka",region:"Dakshina Kannada District",aqi:65,temp:29,smog:"Clear Air"},
-{name:"Hubballi-Dharwad, Karnataka",region:"Dharwad District",aqi:84,temp:27,smog:"Clear Air"},
-{name:"Belagavi, Karnataka",region:"Belagavi District",aqi:79,temp:26,smog:"Clear Air"},
-{name:"Chennai, Tamil Nadu",region:"Chennai District",aqi:112,temp:31,smog:"Light Haze"},
-{name:"Coimbatore, Tamil Nadu",region:"Coimbatore District",aqi:76,temp:28,smog:"Clear Air"},
-{name:"Madurai, Tamil Nadu",region:"Madurai District",aqi:89,temp:31,smog:"Clear Air"},
-{name:"Tiruchirappalli, Tamil Nadu",region:"Tiruchirappalli District",aqi:82,temp:31,smog:"Clear Air"},
-{name:"Salem, Tamil Nadu",region:"Salem District",aqi:86,temp:30,smog:"Clear Air"},
-{name:"Hyderabad, Telangana",region:"Hyderabad District",aqi:118,temp:28,smog:"Light Haze"},
-{name:"Warangal, Telangana",region:"Warangal District",aqi:106,temp:28,smog:"Light Haze"},
-{name:"Visakhapatnam, Andhra Pradesh",region:"Coastal District",aqi:94,temp:29,smog:"Clear Air"},
-{name:"Vijayawada, Andhra Pradesh",region:"NTR District",aqi:114,temp:30,smog:"Light Haze"},
-{name:"Tirupati, Andhra Pradesh",region:"Tirupati District",aqi:85,temp:29,smog:"Clear Air"},
-{name:"Kolkata, West Bengal",region:"Kolkata District",aqi:245,temp:27,smog:"Dense Smog"},
-{name:"Howrah, West Bengal",region:"Howrah District",aqi:252,temp:27,smog:"Dense Smog"},
-{name:"Asansol, West Bengal",region:"Paschim Bardhaman District",aqi:228,temp:26,smog:"Dense Smog"},
-{name:"Siliguri, West Bengal",region:"Darjeeling / Jalpaiguri",aqi:118,temp:22,smog:"Light Haze"},
-{name:"Varanasi, Uttar Pradesh",region:"Varanasi District",aqi:312,temp:23,smog:"Severe Smog"},
-{name:"Lucknow, Uttar Pradesh",region:"Lucknow District",aqi:286,temp:24,smog:"Dense Smog"},
-{name:"Kanpur, Uttar Pradesh",region:"Kanpur Nagar District",aqi:298,temp:24,smog:"Dense Smog"},
-{name:"Agra, Uttar Pradesh",region:"Agra District",aqi:274,temp:25,smog:"Dense Smog"},
-{name:"Prayagraj, Uttar Pradesh",region:"Prayagraj District",aqi:282,temp:24,smog:"Dense Smog"},
-{name:"Gorakhpur, Uttar Pradesh",region:"Gorakhpur District",aqi:248,temp:24,smog:"Dense Smog"},
-{name:"Patna, Bihar",region:"Patna District",aqi:318,temp:24,smog:"Severe Smog"},
-{name:"Gaya, Bihar",region:"Gaya District",aqi:276,temp:25,smog:"Dense Smog"},
-{name:"Muzaffarpur, Bihar",region:"Muzaffarpur District",aqi:292,temp:24,smog:"Dense Smog"},
-{name:"Ranchi, Jharkhand",region:"Ranchi District",aqi:146,temp:23,smog:"Light Haze"},
-{name:"Jamshedpur, Jharkhand",region:"East Singhbhum District",aqi:164,temp:25,smog:"Light Haze"},
-{name:"Bhubaneswar, Odisha",region:"Khordha District",aqi:132,temp:28,smog:"Light Haze"},
-{name:"Cuttack, Odisha",region:"Cuttack District",aqi:138,temp:28,smog:"Light Haze"},
-{name:"Jaipur, Rajasthan",region:"Jaipur District",aqi:194,temp:27,smog:"Light Haze"},
-{name:"Jodhpur, Rajasthan",region:"Jodhpur District",aqi:162,temp:28,smog:"Light Haze"},
-{name:"Udaipur, Rajasthan",region:"Udaipur District",aqi:118,temp:25,smog:"Light Haze"},
-{name:"Kota, Rajasthan",region:"Kota District",aqi:176,temp:27,smog:"Light Haze"},
-{name:"Ahmedabad, Gujarat",region:"Ahmedabad District",aqi:178,temp:30,smog:"Light Haze"},
-{name:"Surat, Gujarat",region:"Surat District",aqi:148,temp:30,smog:"Light Haze"},
-{name:"Vadodara, Gujarat",region:"Vadodara District",aqi:156,temp:29,smog:"Light Haze"},
-{name:"Rajkot, Gujarat",region:"Rajkot District",aqi:134,temp:29,smog:"Light Haze"},
-{name:"Indore, Madhya Pradesh",region:"Indore District",aqi:142,temp:26,smog:"Light Haze"},
-{name:"Bhopal, Madhya Pradesh",region:"Bhopal District",aqi:152,temp:25,smog:"Light Haze"},
-{name:"Jabalpur, Madhya Pradesh",region:"Jabalpur District",aqi:136,temp:25,smog:"Light Haze"},
-{name:"Raipur, Chhattisgarh",region:"Raipur District",aqi:172,temp:27,smog:"Light Haze"},
-{name:"Chandigarh",region:"Chandigarh UT",aqi:218,temp:22,smog:"Dense Smog"},
-{name:"Ludhiana, Punjab",region:"Ludhiana District",aqi:264,temp:22,smog:"Dense Smog"},
-{name:"Amritsar, Punjab",region:"Amritsar District",aqi:238,temp:21,smog:"Dense Smog"},
-{name:"Jalandhar, Punjab",region:"Jalandhar District",aqi:224,temp:22,smog:"Dense Smog"},
-{name:"Panipat, Haryana",region:"Panipat District",aqi:288,temp:23,smog:"Dense Smog"},
-{name:"Hisar, Haryana",region:"Hisar District",aqi:256,temp:24,smog:"Dense Smog"},
-{name:"Dehradun, Uttarakhand",region:"Dehradun District",aqi:128,temp:20,smog:"Light Haze"},
-{name:"Shimla, Himachal Pradesh",region:"Shimla District",aqi:54,temp:14,smog:"Clear Air"},
-{name:"Srinagar, Jammu & Kashmir",region:"Srinagar District",aqi:78,temp:11,smog:"Clear Air"},
-{name:"Jammu, Jammu & Kashmir",region:"Jammu District",aqi:144,temp:22,smog:"Light Haze"},
-{name:"Guwahati, Assam",region:"Kamrup Metropolitan",aqi:136,temp:25,smog:"Light Haze"},
-{name:"Imphal, Manipur",region:"Imphal West District",aqi:72,temp:21,smog:"Clear Air"},
-{name:"Shillong, Meghalaya",region:"East Khasi Hills",aqi:52,temp:16,smog:"Clear Air"},
-{name:"Aizawl, Mizoram",region:"Aizawl District",aqi:48,temp:19,smog:"Clear Air"},
-{name:"Agartala, Tripura",region:"West Tripura District",aqi:98,temp:26,smog:"Clear Air"},
-{name:"Gangtok, Sikkim",region:"Gangtok District",aqi:46,temp:13,smog:"Clear Air"},
-{name:"Panaji, Goa",region:"North Goa District",aqi:62,temp:30,smog:"Clear Air"}
+{name:"New Delhi",region:"Delhi NCR",aliases:["delhi"],aqi:385,temp:24,smog:"Severe Smog"},
+{name:"Gurugram, Haryana",region:"Delhi NCR District",aliases:["gurgaon"],aqi:342,temp:24,smog:"Severe Smog"},
+{name:"Noida, Uttar Pradesh",region:"Delhi NCR District",aliases:[],aqi:356,temp:24,smog:"Severe Smog"},
+{name:"Faridabad, Haryana",region:"Delhi NCR District",aliases:[],aqi:328,temp:25,smog:"Severe Smog"},
+{name:"Ghaziabad, Uttar Pradesh",region:"Delhi NCR District",aliases:[],aqi:364,temp:24,smog:"Severe Smog"},
+{name:"Mumbai, Maharashtra",region:"Mumbai Suburban & City",aliases:["bombay"],aqi:168,temp:30,smog:"Light Haze"},
+{name:"Thane, Maharashtra",region:"Konkan District",aliases:[],aqi:154,temp:30,smog:"Light Haze"},
+{name:"Navi Mumbai, Maharashtra",region:"Konkan District",aliases:[],aqi:162,temp:30,smog:"Light Haze"},
+{name:"Pune, Maharashtra",region:"Pune District",aliases:["poona"],aqi:96,temp:26,smog:"Clear Air"},
+{name:"Nagpur, Maharashtra",region:"Vidarbha District",aliases:[],aqi:124,temp:28,smog:"Light Haze"},
+{name:"Nashik, Maharashtra",region:"North Maharashtra District",aliases:[],aqi:88,temp:26,smog:"Clear Air"},
+{name:"Chhatrapati Sambhajinagar, Maharashtra",region:"Marathwada District",aliases:["aurangabad"],aqi:104,temp:28,smog:"Light Haze"},
+{name:"Kannur, Kerala",region:"Malabar District",aliases:["cannanore"],aqi:68,temp:29,smog:"Clear Air"},
+{name:"Kochi, Kerala",region:"Ernakulam District",aliases:["cochin"],aqi:64,temp:30,smog:"Clear Air"},
+{name:"Thiruvananthapuram, Kerala",region:"Capital District",aliases:["trivandrum","thiruvananthapuram kerala"],aqi:58,temp:30,smog:"Clear Air"},
+{name:"Kozhikode, Kerala",region:"Malabar District",aliases:["calicut"],aqi:66,temp:29,smog:"Clear Air"},
+{name:"Thrissur, Kerala",region:"Central Kerala District",aliases:["trichur"],aqi:62,temp:29,smog:"Clear Air"},
+{name:"Alappuzha, Kerala",region:"Coastal District",aliases:["alleppey"],aqi:56,temp:30,smog:"Clear Air"},
+{name:"Palakkad, Kerala",region:"Palakkad Gap District",aliases:["palghat"],aqi:72,temp:31,smog:"Clear Air"},
+{name:"Kollam, Kerala",region:"Coastal District",aliases:["quilon"],aqi:60,temp:30,smog:"Clear Air"},
+{name:"Bengaluru, Karnataka",region:"Bengaluru Urban District",aliases:["bangalore"],aqi:74,temp:25,smog:"Clear Air"},
+{name:"Mysuru, Karnataka",region:"Mysuru District",aliases:["mysore"],aqi:69,temp:26,smog:"Clear Air"},
+{name:"Mangaluru, Karnataka",region:"Dakshina Kannada District",aliases:["mangalore"],aqi:65,temp:29,smog:"Clear Air"},
+{name:"Hubballi-Dharwad, Karnataka",region:"Dharwad District",aliases:["hubli","dharwad"],aqi:84,temp:27,smog:"Clear Air"},
+{name:"Belagavi, Karnataka",region:"Belagavi District",aliases:["belgaum"],aqi:79,temp:26,smog:"Clear Air"},
+{name:"Chennai, Tamil Nadu",region:"Chennai District",aliases:["madras"],aqi:112,temp:31,smog:"Light Haze"},
+{name:"Coimbatore, Tamil Nadu",region:"Coimbatore District",aliases:[],aqi:76,temp:28,smog:"Clear Air"},
+{name:"Madurai, Tamil Nadu",region:"Madurai District",aliases:[],aqi:89,temp:31,smog:"Clear Air"},
+{name:"Tiruchirappalli, Tamil Nadu",region:"Tiruchirappalli District",aliases:["trichy"],aqi:82,temp:31,smog:"Clear Air"},
+{name:"Salem, Tamil Nadu",region:"Salem District",aliases:[],aqi:86,temp:30,smog:"Clear Air"},
+{name:"Hyderabad, Telangana",region:"Hyderabad District",aliases:[],aqi:118,temp:28,smog:"Light Haze"},
+{name:"Warangal, Telangana",region:"Warangal District",aliases:[],aqi:106,temp:28,smog:"Light Haze"},
+{name:"Visakhapatnam, Andhra Pradesh",region:"Coastal District",aliases:["vizag"],aqi:94,temp:29,smog:"Clear Air"},
+{name:"Vijayawada, Andhra Pradesh",region:"NTR District",aliases:[],aqi:114,temp:30,smog:"Light Haze"},
+{name:"Tirupati, Andhra Pradesh",region:"Tirupati District",aliases:[],aqi:85,temp:29,smog:"Clear Air"},
+{name:"Kolkata, West Bengal",region:"Kolkata District",aliases:["calcutta"],aqi:245,temp:27,smog:"Dense Smog"},
+{name:"Howrah, West Bengal",region:"Howrah District",aliases:[],aqi:252,temp:27,smog:"Dense Smog"},
+{name:"Asansol, West Bengal",region:"Paschim Bardhaman District",aliases:[],aqi:228,temp:26,smog:"Dense Smog"},
+{name:"Siliguri, West Bengal",region:"Darjeeling / Jalpaiguri",aliases:[],aqi:118,temp:22,smog:"Light Haze"},
+{name:"Varanasi, Uttar Pradesh",region:"Varanasi District",aliases:["banaras","kashi"],aqi:312,temp:23,smog:"Severe Smog"},
+{name:"Lucknow, Uttar Pradesh",region:"Lucknow District",aliases:[],aqi:286,temp:24,smog:"Dense Smog"},
+{name:"Kanpur, Uttar Pradesh",region:"Kanpur Nagar District",aliases:[],aqi:298,temp:24,smog:"Dense Smog"},
+{name:"Agra, Uttar Pradesh",region:"Agra District",aliases:[],aqi:274,temp:25,smog:"Dense Smog"},
+{name:"Prayagraj, Uttar Pradesh",region:"Prayagraj District",aliases:["allahabad"],aqi:282,temp:24,smog:"Dense Smog"},
+{name:"Gorakhpur, Uttar Pradesh",region:"Gorakhpur District",aliases:[],aqi:248,temp:24,smog:"Dense Smog"},
+{name:"Patna, Bihar",region:"Patna District",aliases:[],aqi:318,temp:24,smog:"Severe Smog"},
+{name:"Gaya, Bihar",region:"Gaya District",aliases:[],aqi:276,temp:25,smog:"Dense Smog"},
+{name:"Muzaffarpur, Bihar",region:"Muzaffarpur District",aliases:[],aqi:292,temp:24,smog:"Dense Smog"},
+{name:"Ranchi, Jharkhand",region:"Ranchi District",aliases:[],aqi:146,temp:23,smog:"Light Haze"},
+{name:"Jamshedpur, Jharkhand",region:"East Singhbhum District",aliases:[],aqi:164,temp:25,smog:"Light Haze"},
+{name:"Bhubaneswar, Odisha",region:"Khordha District",aliases:[],aqi:132,temp:28,smog:"Light Haze"},
+{name:"Cuttack, Odisha",region:"Cuttack District",aliases:[],aqi:138,temp:28,smog:"Light Haze"},
+{name:"Jaipur, Rajasthan",region:"Jaipur District",aliases:[],aqi:194,temp:27,smog:"Light Haze"},
+{name:"Jodhpur, Rajasthan",region:"Jodhpur District",aliases:[],aqi:162,temp:28,smog:"Light Haze"},
+{name:"Udaipur, Rajasthan",region:"Udaipur District",aliases:[],aqi:118,temp:25,smog:"Light Haze"},
+{name:"Kota, Rajasthan",region:"Kota District",aliases:[],aqi:176,temp:27,smog:"Light Haze"},
+{name:"Ahmedabad, Gujarat",region:"Ahmedabad District",aliases:[],aqi:178,temp:30,smog:"Light Haze"},
+{name:"Surat, Gujarat",region:"Surat District",aliases:[],aqi:148,temp:30,smog:"Light Haze"},
+{name:"Vadodara, Gujarat",region:"Vadodara District",aliases:["baroda"],aqi:156,temp:29,smog:"Light Haze"},
+{name:"Rajkot, Gujarat",region:"Rajkot District",aliases:[],aqi:134,temp:29,smog:"Light Haze"},
+{name:"Indore, Madhya Pradesh",region:"Indore District",aliases:[],aqi:142,temp:26,smog:"Light Haze"},
+{name:"Bhopal, Madhya Pradesh",region:"Bhopal District",aliases:[],aqi:152,temp:25,smog:"Light Haze"},
+{name:"Jabalpur, Madhya Pradesh",region:"Jabalpur District",aliases:[],aqi:136,temp:25,smog:"Light Haze"},
+{name:"Raipur, Chhattisgarh",region:"Raipur District",aliases:[],aqi:172,temp:27,smog:"Light Haze"},
+{name:"Chandigarh",region:"Chandigarh UT",aliases:[],aqi:218,temp:22,smog:"Dense Smog"},
+{name:"Ludhiana, Punjab",region:"Ludhiana District",aliases:[],aqi:264,temp:22,smog:"Dense Smog"},
+{name:"Amritsar, Punjab",region:"Amritsar District",aliases:[],aqi:238,temp:21,smog:"Dense Smog"},
+{name:"Jalandhar, Punjab",region:"Jalandhar District",aliases:[],aqi:224,temp:22,smog:"Dense Smog"},
+{name:"Panipat, Haryana",region:"Panipat District",aliases:[],aqi:288,temp:23,smog:"Dense Smog"},
+{name:"Hisar, Haryana",region:"Hisar District",aliases:[],aqi:256,temp:24,smog:"Dense Smog"},
+{name:"Dehradun, Uttarakhand",region:"Dehradun District",aliases:[],aqi:128,temp:20,smog:"Light Haze"},
+{name:"Shimla, Himachal Pradesh",region:"Shimla District",aliases:[],aqi:54,temp:14,smog:"Clear Air"},
+{name:"Srinagar, Jammu & Kashmir",region:"Srinagar District",aliases:[],aqi:78,temp:11,smog:"Clear Air"},
+{name:"Jammu, Jammu & Kashmir",region:"Jammu District",aliases:[],aqi:144,temp:22,smog:"Light Haze"},
+{name:"Guwahati, Assam",region:"Kamrup Metropolitan",aliases:[],aqi:136,temp:25,smog:"Light Haze"},
+{name:"Imphal, Manipur",region:"Imphal West District",aliases:[],aqi:72,temp:21,smog:"Clear Air"},
+{name:"Shillong, Meghalaya",region:"East Khasi Hills",aliases:[],aqi:52,temp:16,smog:"Clear Air"},
+{name:"Aizawl, Mizoram",region:"Aizawl District",aliases:[],aqi:48,temp:19,smog:"Clear Air"},
+{name:"Agartala, Tripura",region:"West Tripura District",aliases:[],aqi:98,temp:26,smog:"Clear Air"},
+{name:"Gangtok, Sikkim",region:"Gangtok District",aliases:[],aqi:46,temp:13,smog:"Clear Air"},
+{name:"Panaji, Goa",region:"North Goa District",aliases:["panjim"],aqi:62,temp:30,smog:"Clear Air"}
 ];
 const TASKS=[
 "Seal window gaps and keep indoor doors closed during peak smog",
@@ -423,16 +426,18 @@ for(let i=0;i<clean.length;i++)h=(h*31+clean.charCodeAt(i))%10000;
 const aqi=52+(h%335);
 const temp=14+(h%22);
 const smog=aqi<=100?"Clear Air":aqi<=200?"Light Haze":aqi<=300?"Dense Smog":"Severe Smog";
-return{name:clean,region:"Indian District / Locality",aqi,temp,smog};
+return{name:clean,region:"Indian District / Locality",aliases:[],aqi,temp,smog};
 }
 
 function getMatches(rawQuery){
 const q=rawQuery.trim().toLowerCase();
 if(!q)return DIRECTORY.slice(0,8);
-const hits=DIRECTORY.filter(item=>item.name.toLowerCase().includes(q)||item.region.toLowerCase().includes(q));
-const custom=estimateCustomPlace(rawQuery);
-const exists=hits.some(item=>item.name.toLowerCase()===custom.name.toLowerCase());
-return exists?hits.slice(0,10):[custom,...hits].slice(0,10);
+const hits=DIRECTORY.filter(item=>{
+if(item.name.toLowerCase().includes(q)||item.region.toLowerCase().includes(q))return true;
+return Array.isArray(item.aliases)&&item.aliases.some(a=>a.includes(q)||q.includes(a));
+});
+if(hits.length>0)return hits.slice(0,10);
+return [estimateCustomPlace(rawQuery)];
 }
 
 function selectLocation(loc){
@@ -449,8 +454,9 @@ btn.classList.toggle("sel",c===target||target.startsWith(c+",")||c.startsWith(ta
 });
 render();
 const hero=document.getElementById("heroAqi");
-hero.style.transform="scale(1.06)";
-setTimeout(()=>{hero.style.transform="scale(1)";},180);
+hero.classList.remove("pop");
+void hero.offsetWidth;
+hero.classList.add("pop");
 const msg=`Loaded ${loc.name} — AQI ${loc.aqi}, ${loc.temp}°C, ${loc.smog}.`;
 document.getElementById("statusMsg").textContent=msg;
 document.getElementById("srLive").textContent=msg;
