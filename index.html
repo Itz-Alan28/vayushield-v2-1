@@ -7,29 +7,33 @@
 <style>
 :root{--bg:#070b14;--surface:#111827;--surface-2:#172033;--border:#27344e;--text:#f1f5f9;--muted:#94a3b8;--accent:#38bdf8;--accent-2:#22d3ee;--good:#22c55e;--mod:#f59e0b;--poor:#f97316;--severe:#ef4444;--r:14px}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(circle at 15% 0%,rgba(56,189,248,.14),transparent 35%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.45;min-height:100vh}
+body{margin:0;background:radial-gradient(circle at 15% 0%,rgba(56,189,248,.16),transparent 38%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.45;min-height:100vh}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-@keyframes riseIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes softPulse{0%,100%{opacity:1}50%{opacity:.55}}
-.anim{animation:riseIn .32s ease both}
-.dot-live{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent-2);margin-right:6px;animation:softPulse 2.2s ease-in-out infinite}
-@media(prefers-reduced-motion:reduce){.anim,.dot-live{animation:none}}
+@keyframes riseIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes softPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.86)}}
+@keyframes sheen{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.anim{animation:riseIn .38s cubic-bezier(.22,1,.36,1) both}
+.anim-d1{animation-delay:.05s}
+.anim-d2{animation-delay:.1s}
+.anim-d3{animation-delay:.15s}
+.dot-live{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent-2);margin-right:6px;animation:softPulse 2s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){.anim,.anim-d1,.anim-d2,.anim-d3,.dot-live{animation:none}}
 .wrap{max-width:1080px;margin:0 auto;padding:16px 14px 56px}
 .bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:14px}
 .tag{display:inline-flex;align-items:center;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);background:rgba(56,189,248,.14);border:1px solid rgba(56,189,248,.35);padding:3px 9px;border-radius:999px;margin-bottom:6px}
 h1{margin:0;font-size:1.5rem;font-weight:800}
 .sub{margin:2px 0 0;color:var(--muted);font-size:.88rem}
 .row{display:flex;flex-wrap:wrap;gap:8px}
-button{font-family:inherit;font-size:.85rem;font-weight:600;color:var(--text);background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;cursor:pointer;transition:transform .16s ease,border-color .18s ease,background-color .18s ease}
+button{font-family:inherit;font-size:.85rem;font-weight:600;color:var(--text);background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;cursor:pointer;transition:transform .16s ease,border-color .18s ease,background-color .18s ease,box-shadow .18s ease}
 button:hover{border-color:var(--accent);transform:translateY(-1px)}
 button:active{transform:translateY(0)}
-button.pri{background:linear-gradient(135deg,#0284c7,#0ea5e9);border-color:#7dd3fc;color:#fff}
+button.pri{background:linear-gradient(135deg,#0284c7,#0ea5e9,#06b6d4);background-size:200% 200%;animation:sheen 6s ease infinite;border-color:#7dd3fc;color:#fff}
 button.on{border-color:var(--accent);box-shadow:0 0 0 1px rgba(56,189,248,.35)}
 .drawer{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:14px}
 .drawer.open{display:block;animation:riseIn .24s ease both}
 .head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
 .head h2{margin:0;font-size:1rem}
-.pill{font-size:.76rem;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:#cbd5e1}
+.pill{font-size:.76rem;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:#cbd5e1;transition:background-color .2s ease,border-color .2s ease}
 .pill.ok{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.45);color:#86efac}
 .pill.warn{background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.45);color:#fde68a}
 .grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:14px;margin-bottom:14px}
@@ -38,16 +42,17 @@ button.on{border-color:var(--accent);box-shadow:0 0 0 1px rgba(56,189,248,.35)}
 .chip{font-family:monospace;font-size:.76rem;color:var(--accent-2);background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.28);padding:3px 8px;border-radius:999px}
 .search-box{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:12px}
 .search-row{display:flex;gap:8px;margin-top:6px}
-input[type=search],input[type=password],select{width:100%;background:#090e1a;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:.86rem;font-family:inherit}
+input[type=search],input[type=password],select{width:100%;background:#090e1a;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:.86rem;font-family:inherit;transition:border-color .18s ease}
+input[type=search]:focus,input[type=password]:focus,select:focus{border-color:var(--accent);outline:none}
 input[type=password]{flex:1 1 220px;width:auto}
-.results{display:flex;flex-direction:column;gap:6px;margin-top:8px;max-height:210px;overflow-y:auto}
+.results{display:flex;flex-direction:column;gap:6px;margin-top:8px;max-height:220px;overflow-y:auto}
 .res-item{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;width:100%;padding:8px 10px;background:#0c1220;border:1px solid var(--border);border-radius:8px}
-.res-item:hover,.res-item.sel{border-color:var(--accent);background:rgba(56,189,248,.14)}
+.res-item:hover,.res-item.sel{border-color:var(--accent);background:rgba(56,189,248,.16)}
 .res-item small{color:var(--muted);font-size:.76rem;display:block}
 .cities{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
 @media(max-width:440px){.cities{grid-template-columns:1fr}}
 .city{text-align:left;display:flex;flex-direction:column;gap:2px;padding:10px 12px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px}
-.city.sel{border-color:var(--accent);background:rgba(56,189,248,.14)}
+.city.sel{border-color:var(--accent);background:rgba(56,189,248,.16);box-shadow:0 0 0 1px rgba(56,189,248,.25)}
 .city b{font-size:.92rem}
 .city small{color:var(--muted);font-size:.78rem}
 .box{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:12px}
@@ -57,40 +62,41 @@ input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
 .toggles{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
 .tog{font-size:.8rem;padding:6px 10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:#cbd5e1}
 .tog[aria-pressed="true"]{background:rgba(56,189,248,.16);border-color:var(--accent);color:#e0f2fe;font-weight:700}
-.banner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:12px}
-.num{font-size:2.2rem;font-weight:800;line-height:1}
-.tier{font-size:.75rem;font-weight:800;padding:4px 9px;border-radius:999px;text-transform:uppercase}
+.banner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:12px;transition:border-color .2s ease}
+.num{font-size:2.2rem;font-weight:800;line-height:1;transition:transform .2s ease}
+.tier{font-size:.75rem;font-weight:800;padding:4px 9px;border-radius:999px;text-transform:uppercase;transition:background-color .2s ease,color .2s ease}
 .t-good{background:rgba(34,197,94,.16);color:#86efac}
 .t-mod{background:rgba(245,158,11,.16);color:#fde68a}
 .t-poor{background:rgba(249,115,22,.16);color:#fdba74}
 .t-sev{background:rgba(239,68,68,.18);color:#fca5a5}
 .pols{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
-.pol{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:9px 11px;transition:border-color .18s ease}
-.pol:hover{border-color:rgba(56,189,248,.45)}
+.pol{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:9px 11px;transition:transform .16s ease,border-color .18s ease}
+.pol:hover{border-color:rgba(56,189,248,.45);transform:translateY(-1px)}
 .pol small{display:block;font-size:.72rem;color:var(--muted);text-transform:uppercase}
 .pol b{font-size:1rem}
 .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 @media(max-width:480px){.kpis{grid-template-columns:1fr}}
-.kpi{background:#0c1220;border:1px solid var(--border);border-radius:10px;padding:10px}
+.kpi{background:#0c1220;border:1px solid var(--border);border-radius:10px;padding:10px;transition:border-color .18s ease}
+.kpi:hover{border-color:rgba(56,189,248,.35)}
 .kpi small{display:block;font-size:.74rem;color:var(--muted);margin-bottom:2px}
 .kpi b{font-size:.96rem;color:var(--accent-2)}
 .hours{display:grid;grid-template-columns:repeat(12,1fr);gap:5px;margin-top:8px}
 @media(max-width:760px){.hours{grid-template-columns:repeat(6,1fr)}}
 @media(max-width:420px){.hours{grid-template-columns:repeat(4,1fr)}}
-.hr{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:6px 4px;text-align:center;font-size:.72rem;transition:transform .16s ease}
-.hr:hover{transform:translateY(-2px)}
+.hr{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:6px 4px;text-align:center;font-size:.72rem;transition:transform .16s ease,border-color .16s ease}
+.hr:hover{transform:translateY(-2px);border-color:rgba(56,189,248,.4)}
 .hr.safe{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.55)}
 .hr.peak{background:rgba(239,68,68,.14);border-color:rgba(239,68,68,.45)}
 .hr b{display:block;margin-top:2px;font-size:.78rem}
 ul.list{margin:8px 0 0;padding-left:18px;color:#cbd5e1;font-size:.88rem}
 ul.list li{margin-bottom:6px}
 .ai{display:none;background:rgba(56,189,248,.09);border:1px solid rgba(56,189,248,.32);border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:.86rem;color:#e0f2fe}
-.ai.show{display:block}
+.ai.show{display:block;animation:riseIn .22s ease both}
 .prec-box{margin-top:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
 .prec-title{font-size:.8rem;font-weight:700;color:var(--accent);margin-bottom:4px}
 .checks{display:flex;flex-direction:column;gap:7px}
-.chk{display:flex;align-items:flex-start;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:.84rem;cursor:pointer;transition:border-color .16s ease,background-color .16s ease}
-.chk:hover{border-color:rgba(56,189,248,.45)}
+.chk{display:flex;align-items:flex-start;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:.84rem;cursor:pointer;transition:transform .15s ease,border-color .16s ease,background-color .16s ease}
+.chk:hover{border-color:rgba(56,189,248,.45);transform:translateX(2px)}
 .chk input{margin-top:2px;accent-color:var(--good)}
 .chk.done{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.35)}
 .chk.done span{text-decoration:line-through;color:var(--muted)}
@@ -104,14 +110,14 @@ ul.list li{margin-bottom:6px}
 <div class="wrap">
 <header class="bar anim">
 <div>
-<div class="tag"><span class="dot-live" aria-hidden="true"></span>VayuShield v2.1 • Zero-Lag Engine</div>
+<div class="tag"><span class="dot-live" aria-hidden="true"></span>VayuShield v2.1 • Itz-Alan28/vayushield-v2-1</div>
 <h1>VayuShield v2.1 Zero-Lag</h1>
-<p class="sub">Urban Smog, District Temp &amp; Air Guardrails — Instant Deterministic Engine + Optional Gemini 3 Flash</p>
+<p class="sub">All-India Cities &amp; Districts Smog, Temp &amp; Air Guardrails — Instant Deterministic Engine + Optional Gemini 3 Flash</p>
 </div>
 <div class="row" role="toolbar" aria-label="Tools">
-<button type="button" id="btnTests" aria-expanded="false">Self-Tests (12)</button>
-<button type="button" id="btnDocs" aria-expanded="false">Architecture &amp; Docs</button>
-<button type="button" id="btnKey" aria-expanded="false">Gemini API Key</button>
+<button type="button" id="btnTests" aria-expanded="false" onclick="window.__vs.togglePanel('testDrawer','btnTests',true)">Self-Tests (12)</button>
+<button type="button" id="btnDocs" aria-expanded="false" onclick="window.__vs.togglePanel('docDrawer','btnDocs',false)">Architecture &amp; Docs</button>
+<button type="button" id="btnKey" aria-expanded="false" onclick="window.__vs.togglePanel('keyDrawer','btnKey',false)">Gemini API Key</button>
 </div>
 </header>
 
@@ -123,7 +129,7 @@ ul.list li{margin-bottom:6px}
 </div>
 <div class="row">
 <span id="testBadge" class="pill">Ready</span>
-<button type="button" id="btnRunTests" class="pri">Run All 12 Tests</button>
+<button type="button" id="btnRunTests" class="pri" onclick="window.__vs.runTests()">Run All 12 Tests</button>
 </div>
 </div>
 <div id="testGrid" class="tgrid"></div>
@@ -149,32 +155,32 @@ ul.list li{margin-bottom:6px}
 <p class="sub">Saved only in <code>sessionStorage</code> for this tab session. Works immediately without a key.</p>
 <div class="row" style="margin-top:8px">
 <input type="password" id="keyInput" placeholder="Paste Gemini API Key (AIza...)" autocomplete="off">
-<button type="button" id="btnSaveKey" class="pri">Save Key</button>
-<button type="button" id="btnClearKey">Clear</button>
+<button type="button" id="btnSaveKey" class="pri" onclick="window.__vs.saveKey()">Save Key</button>
+<button type="button" id="btnClearKey" onclick="window.__vs.clearKey()">Clear</button>
 </div>
 </section>
 
 <main class="grid2">
-<section class="card anim" aria-label="City and Exposure Profile">
+<section class="card anim anim-d1" aria-label="City and Exposure Profile">
 <div class="head">
-<h2>Search City / District &amp; Profile</h2>
+<h2>Search Indian Cities &amp; Districts</h2>
 <span id="perfChip" class="chip">Render: &lt;1ms</span>
 </div>
 
 <div class="search-box">
-<label for="placeSearch" class="lbl">Search Any City or District (e.g., Kannur, Varanasi, Hyderabad)</label>
+<label for="placeSearch" class="lbl">Search Any Indian City, District or State (Kannur, Varanasi, Hyderabad, etc.)</label>
 <div class="search-row">
-<input type="search" id="placeSearch" placeholder="Type Kannur, Varanasi, Hyderabad, Pune..." autocomplete="off">
-<button type="button" id="btnSearchGo" class="pri">Search</button>
+<input type="search" id="placeSearch" placeholder="Type Kannur, Varanasi, Hyderabad, Thane, Patna..." autocomplete="off" oninput="window.__vs.renderSearch()" onkeydown="if(event.key==='Enter'){event.preventDefault();window.__vs.searchGo()}">
+<button type="button" id="btnSearchGo" class="pri" onclick="window.__vs.searchGo()">Search</button>
 </div>
 <div id="searchResults" class="results" role="region" aria-label="Search Results"></div>
 </div>
 
 <div class="cities" id="cityGrid">
-<button type="button" class="city sel" data-city="New Delhi" data-aqi="385" data-temp="24"><b>New Delhi</b><small>AQI 385 • 24°C • Severe Smog</small></button>
-<button type="button" class="city" data-city="Kolkata" data-aqi="245" data-temp="27"><b>Kolkata</b><small>AQI 245 • 27°C • Poor Haze</small></button>
-<button type="button" class="city" data-city="Mumbai" data-aqi="168" data-temp="30"><b>Mumbai</b><small>AQI 168 • 30°C • Moderate</small></button>
-<button type="button" class="city" data-city="Bengaluru" data-aqi="74" data-temp="25"><b>Bengaluru</b><small>AQI 74 • 25°C • Satisfactory</small></button>
+<button type="button" class="city sel" data-city="New Delhi" data-aqi="385" data-temp="24" onclick="window.__vs.pickPreset('New Delhi',385,24)"><b>New Delhi</b><small>AQI 385 • 24°C • Severe Smog</small></button>
+<button type="button" class="city" data-city="Kolkata, West Bengal" data-aqi="245" data-temp="27" onclick="window.__vs.pickPreset('Kolkata, West Bengal',245,27)"><b>Kolkata</b><small>AQI 245 • 27°C • Dense Smog</small></button>
+<button type="button" class="city" data-city="Mumbai, Maharashtra" data-aqi="168" data-temp="30" onclick="window.__vs.pickPreset('Mumbai, Maharashtra',168,30)"><b>Mumbai</b><small>AQI 168 • 30°C • Light Haze</small></button>
+<button type="button" class="city" data-city="Bengaluru, Karnataka" data-aqi="74" data-temp="25" onclick="window.__vs.pickPreset('Bengaluru, Karnataka',74,25)"><b>Bengaluru</b><small>AQI 74 • 25°C • Clear Air</small></button>
 </div>
 
 <div class="box">
@@ -182,7 +188,7 @@ ul.list li{margin-bottom:6px}
 <label for="smogLevel">Smog / Haze Condition</label>
 <span id="smogVal" style="font-family:monospace;color:var(--accent-2);font-weight:700">Auto</span>
 </div>
-<select id="smogLevel">
+<select id="smogLevel" onchange="window.__vs.setSmog(this.value)">
 <option value="Auto">Auto (From AQI)</option>
 <option value="Clear Air">Clear Air</option>
 <option value="Light Haze">Light Haze</option>
@@ -196,7 +202,7 @@ ul.list li{margin-bottom:6px}
 <label for="aqiRange">Custom AQI Simulator</label>
 <span id="aqiVal" style="font-family:monospace;color:var(--accent);font-weight:700">385 AQI</span>
 </div>
-<input type="range" id="aqiRange" min="25" max="500" step="1" value="385">
+<input type="range" id="aqiRange" min="25" max="500" step="1" value="385" oninput="window.__vs.setAqi(this.value)">
 </div>
 
 <div class="box">
@@ -204,28 +210,28 @@ ul.list li{margin-bottom:6px}
 <label for="tempRange">Ambient Temperature Simulator</label>
 <span id="tempVal" style="font-family:monospace;color:var(--accent-2);font-weight:700">24°C</span>
 </div>
-<input type="range" id="tempRange" min="8" max="46" step="1" value="24">
+<input type="range" id="tempRange" min="8" max="46" step="1" value="24" oninput="window.__vs.setTemp(this.value)">
 </div>
 
 <span class="lbl">Household &amp; Commute Guardrails</span>
 <div class="toggles" id="factorGroup">
-<button type="button" class="tog" data-f="asthma" aria-pressed="false">Asthma / Respiratory</button>
-<button type="button" class="tog" data-f="vulnerable" aria-pressed="false">Infants / Elderly</button>
-<button type="button" class="tog" data-f="pets" aria-pressed="false">Indoor Pets</button>
-<button type="button" class="tog" data-f="ventilation" aria-pressed="false">Cross Ventilation</button>
-<button type="button" class="tog" data-f="plants" aria-pressed="false">Indoor Air Plants</button>
-<button type="button" class="tog" data-f="commute" aria-pressed="false">Bike / Open Commute</button>
+<button type="button" class="tog" data-f="asthma" aria-pressed="false" onclick="window.__vs.toggleFactor('asthma',this)">Asthma / Respiratory</button>
+<button type="button" class="tog" data-f="vulnerable" aria-pressed="false" onclick="window.__vs.toggleFactor('vulnerable',this)">Infants / Elderly</button>
+<button type="button" class="tog" data-f="pets" aria-pressed="false" onclick="window.__vs.toggleFactor('pets',this)">Indoor Pets</button>
+<button type="button" class="tog" data-f="ventilation" aria-pressed="false" onclick="window.__vs.toggleFactor('ventilation',this)">Cross Ventilation</button>
+<button type="button" class="tog" data-f="plants" aria-pressed="false" onclick="window.__vs.toggleFactor('plants',this)">Indoor Air Plants</button>
+<button type="button" class="tog" data-f="commute" aria-pressed="false" onclick="window.__vs.toggleFactor('commute',this)">Bike / Open Commute</button>
 </div>
 
 <div class="row">
-<button type="button" id="btnPlan" class="pri" style="flex:1 1 190px">Generate Instant Family Action Plan</button>
-<button type="button" id="btnAi">Enrich with Gemini 3 Flash</button>
-<button type="button" id="btnCopy">Copy Family Health Alert</button>
+<button type="button" id="btnPlan" class="pri" style="flex:1 1 190px" onclick="window.__vs.updatePlan()">Generate Instant Family Action Plan</button>
+<button type="button" id="btnAi" onclick="window.__vs.runAi()">Enrich with Gemini 3 Flash</button>
+<button type="button" id="btnCopy" onclick="window.__vs.copyAlert()">Copy Family Health Alert</button>
 </div>
-<p id="statusMsg" class="sub" style="margin-top:8px" role="status" aria-live="polite"></p>
+<p id="statusMsg" class="sub" style="margin-top:8px" role="status" aria-live="polite">Ready — type any Indian city or district to search and tap a result.</p>
 </section>
 
-<section class="card anim" aria-label="Live Air Index">
+<section class="card anim anim-d2" aria-label="Live Air Index">
 <div class="head">
 <h2 id="indexTitle">New Delhi Live Index</h2>
 <span id="cachePill" class="pill">Cache: Ready</span>
@@ -254,7 +260,7 @@ ul.list li{margin-bottom:6px}
 </section>
 </main>
 
-<section class="card anim" style="margin-bottom:14px" aria-label="24-Hour Smog Forecast">
+<section class="card anim anim-d2" style="margin-bottom:14px" aria-label="24-Hour Smog Forecast">
 <div class="head">
 <h2>24-Hour Smog Window Forecast</h2>
 <span id="safePill" class="pill ok">Safest Window: 12:00–16:00</span>
@@ -263,7 +269,7 @@ ul.list li{margin-bottom:6px}
 <div id="hoursGrid" class="hours"></div>
 </section>
 
-<section class="grid2 anim" style="margin-bottom:0">
+<section class="grid2 anim anim-d3" style="margin-bottom:0">
 <section class="card" aria-label="Action Plan">
 <div class="head">
 <h2>Personalized Smog Action Plan</h2>
@@ -290,18 +296,87 @@ ul.list li{margin-bottom:6px}
 const KEY_STORE="vayushield_v21_key";
 const MODEL="gemini-3-flash-preview";
 const DIRECTORY=[
-{name:"Kannur, Kerala",region:"Coastal District",aqi:68,temp:29,smog:"Clear Air"},
-{name:"Varanasi, Uttar Pradesh",region:"Ganga Plains District",aqi:312,temp:23,smog:"Severe Smog"},
-{name:"Hyderabad, Telangana",region:"Deccan Metro",aqi:118,temp:28,smog:"Light Haze"},
-{name:"New Delhi",region:"NCR",aqi:385,temp:24,smog:"Severe Smog"},
-{name:"Kolkata, West Bengal",region:"Metro",aqi:245,temp:27,smog:"Dense Smog"},
-{name:"Mumbai, Maharashtra",region:"Coastal Metro",aqi:168,temp:30,smog:"Light Haze"},
-{name:"Bengaluru, Karnataka",region:"Plateau Metro",aqi:74,temp:25,smog:"Clear Air"},
-{name:"Pune, Maharashtra",region:"District",aqi:96,temp:26,smog:"Clear Air"},
-{name:"Chennai, Tamil Nadu",region:"Coastal Metro",aqi:112,temp:31,smog:"Light Haze"},
-{name:"Lucknow, Uttar Pradesh",region:"District",aqi:286,temp:24,smog:"Dense Smog"},
-{name:"Jaipur, Rajasthan",region:"District",aqi:194,temp:27,smog:"Light Haze"},
-{name:"Kochi, Kerala",region:"Coastal District",aqi:64,temp:30,smog:"Clear Air"}
+{name:"New Delhi",region:"Delhi NCR",aqi:385,temp:24,smog:"Severe Smog"},
+{name:"Gurugram, Haryana",region:"Delhi NCR District",aqi:342,temp:24,smog:"Severe Smog"},
+{name:"Noida, Uttar Pradesh",region:"Delhi NCR District",aqi:356,temp:24,smog:"Severe Smog"},
+{name:"Faridabad, Haryana",region:"Delhi NCR District",aqi:328,temp:25,smog:"Severe Smog"},
+{name:"Ghaziabad, Uttar Pradesh",region:"Delhi NCR District",aqi:364,temp:24,smog:"Severe Smog"},
+{name:"Mumbai, Maharashtra",region:"Mumbai Suburban & City",aqi:168,temp:30,smog:"Light Haze"},
+{name:"Thane, Maharashtra",region:"Konkan District",aqi:154,temp:30,smog:"Light Haze"},
+{name:"Navi Mumbai, Maharashtra",region:"Konkan District",aqi:162,temp:30,smog:"Light Haze"},
+{name:"Pune, Maharashtra",region:"Pune District",aqi:96,temp:26,smog:"Clear Air"},
+{name:"Nagpur, Maharashtra",region:"Vidarbha District",aqi:124,temp:28,smog:"Light Haze"},
+{name:"Nashik, Maharashtra",region:"North Maharashtra District",aqi:88,temp:26,smog:"Clear Air"},
+{name:"Chhatrapati Sambhajinagar, Maharashtra",region:"Marathwada District",aqi:104,temp:28,smog:"Light Haze"},
+{name:"Kannur, Kerala",region:"Malabar District",aqi:68,temp:29,smog:"Clear Air"},
+{name:"Kochi, Kerala",region:"Ernakulam District",aqi:64,temp:30,smog:"Clear Air"},
+{name:"Thiruvananthapuram, Kerala",region:"Capital District",aqi:58,temp:30,smog:"Clear Air"},
+{name:"Kozhikode, Kerala",region:"Malabar District",aqi:66,temp:29,smog:"Clear Air"},
+{name:"Thrissur, Kerala",region:"Central Kerala District",aqi:62,temp:29,smog:"Clear Air"},
+{name:"Alappuzha, Kerala",region:"Coastal District",aqi:56,temp:30,smog:"Clear Air"},
+{name:"Palakkad, Kerala",region:"Palakkad Gap District",aqi:72,temp:31,smog:"Clear Air"},
+{name:"Kollam, Kerala",region:"Coastal District",aqi:60,temp:30,smog:"Clear Air"},
+{name:"Bengaluru, Karnataka",region:"Bengaluru Urban District",aqi:74,temp:25,smog:"Clear Air"},
+{name:"Mysuru, Karnataka",region:"Mysuru District",aqi:69,temp:26,smog:"Clear Air"},
+{name:"Mangaluru, Karnataka",region:"Dakshina Kannada District",aqi:65,temp:29,smog:"Clear Air"},
+{name:"Hubballi-Dharwad, Karnataka",region:"Dharwad District",aqi:84,temp:27,smog:"Clear Air"},
+{name:"Belagavi, Karnataka",region:"Belagavi District",aqi:79,temp:26,smog:"Clear Air"},
+{name:"Chennai, Tamil Nadu",region:"Chennai District",aqi:112,temp:31,smog:"Light Haze"},
+{name:"Coimbatore, Tamil Nadu",region:"Coimbatore District",aqi:76,temp:28,smog:"Clear Air"},
+{name:"Madurai, Tamil Nadu",region:"Madurai District",aqi:89,temp:31,smog:"Clear Air"},
+{name:"Tiruchirappalli, Tamil Nadu",region:"Tiruchirappalli District",aqi:82,temp:31,smog:"Clear Air"},
+{name:"Salem, Tamil Nadu",region:"Salem District",aqi:86,temp:30,smog:"Clear Air"},
+{name:"Hyderabad, Telangana",region:"Hyderabad District",aqi:118,temp:28,smog:"Light Haze"},
+{name:"Warangal, Telangana",region:"Warangal District",aqi:106,temp:28,smog:"Light Haze"},
+{name:"Visakhapatnam, Andhra Pradesh",region:"Coastal District",aqi:94,temp:29,smog:"Clear Air"},
+{name:"Vijayawada, Andhra Pradesh",region:"NTR District",aqi:114,temp:30,smog:"Light Haze"},
+{name:"Tirupati, Andhra Pradesh",region:"Tirupati District",aqi:85,temp:29,smog:"Clear Air"},
+{name:"Kolkata, West Bengal",region:"Kolkata District",aqi:245,temp:27,smog:"Dense Smog"},
+{name:"Howrah, West Bengal",region:"Howrah District",aqi:252,temp:27,smog:"Dense Smog"},
+{name:"Asansol, West Bengal",region:"Paschim Bardhaman District",aqi:228,temp:26,smog:"Dense Smog"},
+{name:"Siliguri, West Bengal",region:"Darjeeling / Jalpaiguri",aqi:118,temp:22,smog:"Light Haze"},
+{name:"Varanasi, Uttar Pradesh",region:"Varanasi District",aqi:312,temp:23,smog:"Severe Smog"},
+{name:"Lucknow, Uttar Pradesh",region:"Lucknow District",aqi:286,temp:24,smog:"Dense Smog"},
+{name:"Kanpur, Uttar Pradesh",region:"Kanpur Nagar District",aqi:298,temp:24,smog:"Dense Smog"},
+{name:"Agra, Uttar Pradesh",region:"Agra District",aqi:274,temp:25,smog:"Dense Smog"},
+{name:"Prayagraj, Uttar Pradesh",region:"Prayagraj District",aqi:282,temp:24,smog:"Dense Smog"},
+{name:"Gorakhpur, Uttar Pradesh",region:"Gorakhpur District",aqi:248,temp:24,smog:"Dense Smog"},
+{name:"Patna, Bihar",region:"Patna District",aqi:318,temp:24,smog:"Severe Smog"},
+{name:"Gaya, Bihar",region:"Gaya District",aqi:276,temp:25,smog:"Dense Smog"},
+{name:"Muzaffarpur, Bihar",region:"Muzaffarpur District",aqi:292,temp:24,smog:"Dense Smog"},
+{name:"Ranchi, Jharkhand",region:"Ranchi District",aqi:146,temp:23,smog:"Light Haze"},
+{name:"Jamshedpur, Jharkhand",region:"East Singhbhum District",aqi:164,temp:25,smog:"Light Haze"},
+{name:"Bhubaneswar, Odisha",region:"Khordha District",aqi:132,temp:28,smog:"Light Haze"},
+{name:"Cuttack, Odisha",region:"Cuttack District",aqi:138,temp:28,smog:"Light Haze"},
+{name:"Jaipur, Rajasthan",region:"Jaipur District",aqi:194,temp:27,smog:"Light Haze"},
+{name:"Jodhpur, Rajasthan",region:"Jodhpur District",aqi:162,temp:28,smog:"Light Haze"},
+{name:"Udaipur, Rajasthan",region:"Udaipur District",aqi:118,temp:25,smog:"Light Haze"},
+{name:"Kota, Rajasthan",region:"Kota District",aqi:176,temp:27,smog:"Light Haze"},
+{name:"Ahmedabad, Gujarat",region:"Ahmedabad District",aqi:178,temp:30,smog:"Light Haze"},
+{name:"Surat, Gujarat",region:"Surat District",aqi:148,temp:30,smog:"Light Haze"},
+{name:"Vadodara, Gujarat",region:"Vadodara District",aqi:156,temp:29,smog:"Light Haze"},
+{name:"Rajkot, Gujarat",region:"Rajkot District",aqi:134,temp:29,smog:"Light Haze"},
+{name:"Indore, Madhya Pradesh",region:"Indore District",aqi:142,temp:26,smog:"Light Haze"},
+{name:"Bhopal, Madhya Pradesh",region:"Bhopal District",aqi:152,temp:25,smog:"Light Haze"},
+{name:"Jabalpur, Madhya Pradesh",region:"Jabalpur District",aqi:136,temp:25,smog:"Light Haze"},
+{name:"Raipur, Chhattisgarh",region:"Raipur District",aqi:172,temp:27,smog:"Light Haze"},
+{name:"Chandigarh",region:"Chandigarh UT",aqi:218,temp:22,smog:"Dense Smog"},
+{name:"Ludhiana, Punjab",region:"Ludhiana District",aqi:264,temp:22,smog:"Dense Smog"},
+{name:"Amritsar, Punjab",region:"Amritsar District",aqi:238,temp:21,smog:"Dense Smog"},
+{name:"Jalandhar, Punjab",region:"Jalandhar District",aqi:224,temp:22,smog:"Dense Smog"},
+{name:"Panipat, Haryana",region:"Panipat District",aqi:288,temp:23,smog:"Dense Smog"},
+{name:"Hisar, Haryana",region:"Hisar District",aqi:256,temp:24,smog:"Dense Smog"},
+{name:"Dehradun, Uttarakhand",region:"Dehradun District",aqi:128,temp:20,smog:"Light Haze"},
+{name:"Shimla, Himachal Pradesh",region:"Shimla District",aqi:54,temp:14,smog:"Clear Air"},
+{name:"Srinagar, Jammu & Kashmir",region:"Srinagar District",aqi:78,temp:11,smog:"Clear Air"},
+{name:"Jammu, Jammu & Kashmir",region:"Jammu District",aqi:144,temp:22,smog:"Light Haze"},
+{name:"Guwahati, Assam",region:"Kamrup Metropolitan",aqi:136,temp:25,smog:"Light Haze"},
+{name:"Imphal, Manipur",region:"Imphal West District",aqi:72,temp:21,smog:"Clear Air"},
+{name:"Shillong, Meghalaya",region:"East Khasi Hills",aqi:52,temp:16,smog:"Clear Air"},
+{name:"Aizawl, Mizoram",region:"Aizawl District",aqi:48,temp:19,smog:"Clear Air"},
+{name:"Agartala, Tripura",region:"West Tripura District",aqi:98,temp:26,smog:"Clear Air"},
+{name:"Gangtok, Sikkim",region:"Gangtok District",aqi:46,temp:13,smog:"Clear Air"},
+{name:"Panaji, Goa",region:"North Goa District",aqi:62,temp:30,smog:"Clear Air"}
 ];
 const TASKS=[
 "Seal window gaps and keep indoor doors closed during peak smog",
@@ -345,19 +420,19 @@ function estimateCustomPlace(query){
 const clean=query.trim().slice(0,60);
 let h=0;
 for(let i=0;i<clean.length;i++)h=(h*31+clean.charCodeAt(i))%10000;
-const aqi=55+(h%330);
-const temp=18+(h%18);
+const aqi=52+(h%335);
+const temp=14+(h%22);
 const smog=aqi<=100?"Clear Air":aqi<=200?"Light Haze":aqi<=300?"Dense Smog":"Severe Smog";
-return{name:clean,region:"Searched Location",aqi,temp,smog};
+return{name:clean,region:"Indian District / Locality",aqi,temp,smog};
 }
 
 function getMatches(rawQuery){
 const q=rawQuery.trim().toLowerCase();
-if(!q)return DIRECTORY.slice(0,6);
+if(!q)return DIRECTORY.slice(0,8);
 const hits=DIRECTORY.filter(item=>item.name.toLowerCase().includes(q)||item.region.toLowerCase().includes(q));
 const custom=estimateCustomPlace(rawQuery);
 const exists=hits.some(item=>item.name.toLowerCase()===custom.name.toLowerCase());
-return exists?hits:[custom,...hits];
+return exists?hits.slice(0,10):[custom,...hits].slice(0,10);
 }
 
 function selectLocation(loc){
@@ -368,11 +443,15 @@ state.smog="Auto";
 document.getElementById("smogLevel").value="Auto";
 state.aiText="";
 document.querySelectorAll("#cityGrid .city").forEach(btn=>{
-const match=(btn.dataset.city||"").toLowerCase()===loc.name.toLowerCase();
-btn.classList.toggle("sel",match);
+const c=(btn.dataset.city||"").toLowerCase();
+const target=loc.name.toLowerCase();
+btn.classList.toggle("sel",c===target||target.startsWith(c+",")||c.startsWith(target+","));
 });
 render();
-const msg=`Loaded live index for ${loc.name} — AQI ${loc.aqi}, ${loc.temp}°C, ${loc.smog}.`;
+const hero=document.getElementById("heroAqi");
+hero.style.transform="scale(1.06)";
+setTimeout(()=>{hero.style.transform="scale(1)";},180);
+const msg=`Loaded ${loc.name} — AQI ${loc.aqi}, ${loc.temp}°C, ${loc.smog}.`;
 document.getElementById("statusMsg").textContent=msg;
 document.getElementById("srLive").textContent=msg;
 }
@@ -383,14 +462,9 @@ const matches=getMatches(q);
 const box=document.getElementById("searchResults");
 box.innerHTML=matches.map((item,idx)=>{
 const active=item.name.toLowerCase()===state.city.toLowerCase();
-return `<button type="button" class="res-item ${active?"sel":""}" data-idx="${idx}"><div><b>${esc(item.name)}</b><small>${esc(item.region)} • ${esc(item.smog)}</small></div><span class="pill">AQI ${item.aqi} • ${item.temp}°C</span></button>`;
+return `<button type="button" class="res-item ${active?"sel":""}" onclick="window.__vs.pickResult(${idx})"><div><b>${esc(item.name)}</b><small>${esc(item.region)} • ${esc(item.smog)}</small></div><span class="pill">AQI ${item.aqi} • ${item.temp}°C</span></button>`;
 }).join("");
-box.querySelectorAll(".res-item").forEach(btn=>{
-btn.addEventListener("click",()=>{
-const idx=Number(btn.dataset.idx);
-if(matches[idx])selectLocation(matches[idx]);
-});
-});
+window.__vs._matches=matches;
 }
 
 function compute(city,aqi,temp,smogOpt,factors){
@@ -460,7 +534,7 @@ const box=document.getElementById("chkList");
 box.innerHTML=TASKS.map((t,i)=>{
 const on=Boolean(state.done[i]);
 if(on)c++;
-return `<label class="chk ${on?"done":""}"><input type="checkbox" data-i="${i}" ${on?"checked":""}><span>${esc(t)}</span></label>`;
+return `<label class="chk ${on?"done":""}"><input type="checkbox" ${on?"checked":""} onchange="window.__vs.toggleTask(${i},this.checked)"><span>${esc(t)}</span></label>`;
 }).join("");
 document.getElementById("chkPill").textContent=`${c} / ${TASKS.length} Done`;
 }
@@ -594,87 +668,61 @@ document.getElementById("testSum").textContent=pass===t.length?"All 12 checks pa
 document.getElementById("testGrid").innerHTML=t.map(x=>`<div class="tcard"><div class="tcard-top"><span>${esc(x.n)}</span><span class="pill ${x.ok?"ok":"warn"}">${x.ok?"PASS":"FAIL"}</span></div><div class="sub">${esc(x.d)}</div></div>`).join("");
 }
 
-function togglePanel(drawerId,btnId){
+window.__vs={
+_matches:[],
+togglePanel(drawerId,btnId,autoRun){
 const d=document.getElementById(drawerId);
 const btn=document.getElementById(btnId);
 const open=!d.classList.contains("open");
 d.classList.toggle("open",open);
 btn.setAttribute("aria-expanded",String(open));
 btn.classList.toggle("on",open);
-}
-
-document.getElementById("btnTests").addEventListener("click",()=>{
-togglePanel("testDrawer","btnTests");
-if(document.getElementById("testDrawer").classList.contains("open"))runTests();
-});
-document.getElementById("btnDocs").addEventListener("click",()=>togglePanel("docDrawer","btnDocs"));
-document.getElementById("btnKey").addEventListener("click",()=>togglePanel("keyDrawer","btnKey"));
-document.getElementById("btnRunTests").addEventListener("click",runTests);
-
-document.getElementById("placeSearch").addEventListener("input",renderSearchResults);
-document.getElementById("placeSearch").addEventListener("keydown",e=>{
-if(e.key==="Enter"){
-e.preventDefault();
-const matches=getMatches(e.target.value);
-if(matches[0])selectLocation(matches[0]);
-}
-});
-document.getElementById("btnSearchGo").addEventListener("click",()=>{
+if(open&&autoRun)runTests();
+},
+runTests,
+renderSearch:renderSearchResults,
+searchGo(){
 const q=document.getElementById("placeSearch").value;
 const matches=getMatches(q);
 if(matches[0])selectLocation(matches[0]);
-});
-
-document.querySelectorAll("#cityGrid .city").forEach(btn=>{
-btn.addEventListener("click",()=>{
-selectLocation({
-name:btn.dataset.city||"New Delhi",
-aqi:Number(btn.dataset.aqi||150),
-temp:Number(btn.dataset.temp||26),
-smog:"Auto"
-});
-});
-});
-
-document.getElementById("smogLevel").addEventListener("change",e=>{
-state.smog=e.target.value;
+},
+pickResult(idx){
+const item=window.__vs._matches[idx];
+if(item)selectLocation(item);
+},
+pickPreset(city,aqi,temp){
+selectLocation({name:city,aqi:Number(aqi),temp:Number(temp),smog:"Auto"});
+},
+setSmog(val){
+state.smog=val;
 state.aiText="";
 render();
-});
-
-document.getElementById("aqiRange").addEventListener("input",e=>{
-state.aqi=Number(e.target.value);
+},
+setAqi(val){
+state.aqi=Number(val);
 state.aiText="";
 render();
-});
-
-document.getElementById("tempRange").addEventListener("input",e=>{
-state.temp=Number(e.target.value);
+},
+setTemp(val){
+state.temp=Number(val);
 state.aiText="";
 render();
-});
-
-document.querySelectorAll("#factorGroup .tog").forEach(btn=>{
-btn.addEventListener("click",()=>{
-const f=btn.dataset.f;
-if(!f||!(f in state.factors))return;
+},
+toggleFactor(f,btn){
+if(!(f in state.factors))return;
 state.factors[f]=!state.factors[f];
 btn.setAttribute("aria-pressed",String(state.factors[f]));
 state.aiText="";
 render();
-});
-});
-
-document.getElementById("btnPlan").addEventListener("click",()=>{
+},
+updatePlan(){
 render();
 const m=`Updated plan for ${state.city} (AQI ${state.aqi}, ${state.temp}°C).`;
 document.getElementById("statusMsg").textContent=m;
 document.getElementById("srLive").textContent=m;
-});
-
-document.getElementById("btnAi").addEventListener("click",runAi);
-
-document.getElementById("btnCopy").addEventListener("click",async()=>{
+},
+runAi,
+async copyAlert(){
 const txt=alertText();
 try{
 if(navigator.clipboard&&navigator.clipboard.writeText)await navigator.clipboard.writeText(txt);
@@ -682,20 +730,14 @@ document.getElementById("statusMsg").textContent="Copied Family Health Alert.";
 }catch{
 document.getElementById("statusMsg").textContent=txt;
 }
-});
-
-document.getElementById("chkList").addEventListener("change",e=>{
-const inp=e.target;
-if(inp&&inp.matches('input[type="checkbox"]')){
-const i=Number(inp.dataset.i);
-if(!Number.isNaN(i)&&i>=0&&i<state.done.length){
-state.done[i]=inp.checked;
+},
+toggleTask(i,checked){
+if(i>=0&&i<state.done.length){
+state.done[i]=Boolean(checked);
 renderChecks();
 }
-}
-});
-
-document.getElementById("btnSaveKey").addEventListener("click",()=>{
+},
+saveKey(){
 const inp=document.getElementById("keyInput");
 const v=inp.value.trim();
 if(v){
@@ -704,14 +746,14 @@ inp.value="";
 document.getElementById("statusMsg").textContent="Saved Gemini API key for this session.";
 }
 syncKeyPill();
-});
-
-document.getElementById("btnClearKey").addEventListener("click",()=>{
+},
+clearKey(){
 sessionStorage.removeItem(KEY_STORE);
 document.getElementById("keyInput").value="";
 document.getElementById("statusMsg").textContent="Cleared session Gemini API key.";
 syncKeyPill();
-});
+}
+};
 
 render();
 runTests();
