@@ -52,6 +52,7 @@ input[type=password]{flex:1 1 220px;width:auto}
 .res-item{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;width:100%;padding:8px 10px;background:#0c1220;border:1px solid var(--border);border-radius:8px}
 .res-item:hover,.res-item.sel{border-color:var(--accent);background:rgba(56,189,248,.16)}
 .res-item small{color:var(--muted);font-size:.76rem;display:block}
+.empty-res{padding:10px;border-radius:8px;background:#0c1220;border:1px dashed var(--border);color:var(--muted);font-size:.8rem}
 .cities{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
 @media(max-width:440px){.cities{grid-template-columns:1fr}}
 .city{text-align:left;display:flex;flex-direction:column;gap:2px;padding:10px 12px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px}
@@ -72,11 +73,12 @@ input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
 .t-mod{background:rgba(245,158,11,.16);color:#fde68a}
 .t-poor{background:rgba(249,115,22,.16);color:#fdba74}
 .t-sev{background:rgba(239,68,68,.18);color:#fca5a5}
-.pols{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.pols{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+@media(max-width:540px){.pols{grid-template-columns:repeat(2,1fr)}}
 .pol{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:9px 11px;transition:transform .18s cubic-bezier(.16,1,.3,1),border-color .18s ease}
 .pol:hover{border-color:rgba(56,189,248,.5);transform:translateY(-2px)}
 .pol small{display:block;font-size:.72rem;color:var(--muted);text-transform:uppercase}
-.pol b{font-size:1rem}
+.pol b{font-size:.98rem}
 .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 @media(max-width:480px){.kpis{grid-template-columns:1fr}}
 .kpi{background:#0c1220;border:1px solid var(--border);border-radius:10px;padding:10px;transition:border-color .18s ease,transform .18s ease}
@@ -115,7 +117,7 @@ ul.list li{margin-bottom:6px}
 <div>
 <div class="tag"><span class="dot-live" aria-hidden="true"></span>VayuShield v2.1 • Itz-Alan28/vayushield-v2-1</div>
 <h1>VayuShield v2.1 Zero-Lag</h1>
-<p class="sub">All-India Cities &amp; Districts Smog, Temp &amp; Air Guardrails — Instant Deterministic Engine + Optional Gemini 3 Flash</p>
+<p class="sub">All-India Cities &amp; Districts Smog, Temp, Wind Speed &amp; Guardrails — Instant Engine + Optional Gemini 3 Flash</p>
 </div>
 <div class="row" role="toolbar" aria-label="Tools">
 <button type="button" id="btnTests" aria-expanded="false" onclick="window.__vs.togglePanel('testDrawer','btnTests',true)">Self-Tests (12)</button>
@@ -144,7 +146,7 @@ ul.list li{margin-bottom:6px}
 <span class="pill">Single-File • &lt;5ms</span>
 </div>
 <ul class="list">
-<li><b>Memoized Deterministic Engine:</b> Computes risk tiers, PM2.5, PM10, NO2, and O3 estimates, safe outdoor exposure windows, and HEPA modes in under 5 ms.</li>
+<li><b>Memoized Deterministic Engine:</b> Computes risk tiers, PM2.5, PM10, NO2, O3, wind dispersion impact, safe outdoor exposure windows, and HEPA modes in under 5 ms.</li>
 <li><b>Async Gemini 3 Flash Enrichment:</b> Optional <code>gemini-3-flash-preview</code> enrichment with an <code>AbortController</code> 2.5s timeout and instant local fallback.</li>
 <li><b>Security &amp; Privacy:</b> Escapes dynamic strings to prevent XSS and stores optional API keys only in <code>sessionStorage</code>.</li>
 </ul>
@@ -171,19 +173,19 @@ ul.list li{margin-bottom:6px}
 </div>
 
 <div class="search-box">
-<label for="placeSearch" class="lbl">Search Any Indian City, District or State (Trivandrum, Kannur, Varanasi, Hyderabad)</label>
+<label for="placeSearch" class="lbl">Search Any Indian City, District or State (Kollam, Kannur, Varanasi, Hyderabad)</label>
 <div class="search-row">
-<input type="search" id="placeSearch" placeholder="Type Trivandrum, Kannur, Varanasi, Hyderabad..." autocomplete="off" oninput="window.__vs.renderSearch()" onkeydown="if(event.key==='Enter'){event.preventDefault();window.__vs.searchGo()}">
+<input type="search" id="placeSearch" placeholder="Type Kollam, Kannur, Varanasi, Hyderabad..." autocomplete="off" oninput="window.__vs.renderSearch()" onkeydown="if(event.key==='Enter'){event.preventDefault();window.__vs.searchGo()}">
 <button type="button" id="btnSearchGo" class="pri" onclick="window.__vs.searchGo()">Search</button>
 </div>
 <div id="searchResults" class="results" role="region" aria-label="Search Results"></div>
 </div>
 
 <div class="cities" id="cityGrid">
-<button type="button" class="city sel" data-city="New Delhi" data-aqi="385" data-temp="24" onclick="window.__vs.pickPreset('New Delhi',385,24)"><b>New Delhi</b><small>AQI 385 • 24°C • Severe Smog</small></button>
-<button type="button" class="city" data-city="Kolkata, West Bengal" data-aqi="245" data-temp="27" onclick="window.__vs.pickPreset('Kolkata, West Bengal',245,27)"><b>Kolkata</b><small>AQI 245 • 27°C • Dense Smog</small></button>
-<button type="button" class="city" data-city="Mumbai, Maharashtra" data-aqi="168" data-temp="30" onclick="window.__vs.pickPreset('Mumbai, Maharashtra',168,30)"><b>Mumbai</b><small>AQI 168 • 30°C • Light Haze</small></button>
-<button type="button" class="city" data-city="Bengaluru, Karnataka" data-aqi="74" data-temp="25" onclick="window.__vs.pickPreset('Bengaluru, Karnataka',74,25)"><b>Bengaluru</b><small>AQI 74 • 25°C • Clear Air</small></button>
+<button type="button" class="city sel" data-city="New Delhi" data-aqi="385" data-temp="24" data-wind="7" onclick="window.__vs.pickPreset('New Delhi',385,24,7)"><b>New Delhi</b><small>AQI 385 • 24°C • 7 km/h • Severe Smog</small></button>
+<button type="button" class="city" data-city="Kolkata, West Bengal" data-aqi="245" data-temp="27" data-wind="9" onclick="window.__vs.pickPreset('Kolkata, West Bengal',245,27,9)"><b>Kolkata</b><small>AQI 245 • 27°C • 9 km/h • Dense Smog</small></button>
+<button type="button" class="city" data-city="Mumbai, Maharashtra" data-aqi="168" data-temp="30" data-wind="16" onclick="window.__vs.pickPreset('Mumbai, Maharashtra',168,30,16)"><b>Mumbai</b><small>AQI 168 • 30°C • 16 km/h • Light Haze</small></button>
+<button type="button" class="city" data-city="Bengaluru, Karnataka" data-aqi="74" data-temp="25" data-wind="14" onclick="window.__vs.pickPreset('Bengaluru, Karnataka',74,25,14)"><b>Bengaluru</b><small>AQI 74 • 25°C • 14 km/h • Clear Air</small></button>
 </div>
 
 <div class="box">
@@ -216,6 +218,14 @@ ul.list li{margin-bottom:6px}
 <input type="range" id="tempRange" min="8" max="46" step="1" value="24" oninput="window.__vs.setTemp(this.value)">
 </div>
 
+<div class="box">
+<div class="box-top">
+<label for="windRange">Wind Speed Simulator</label>
+<span id="windVal" style="font-family:monospace;color:var(--accent);font-weight:700">7 km/h</span>
+</div>
+<input type="range" id="windRange" min="1" max="45" step="1" value="7" oninput="window.__vs.setWind(this.value)">
+</div>
+
 <span class="lbl">Household &amp; Commute Guardrails</span>
 <div class="toggles" id="factorGroup">
 <button type="button" class="tog" data-f="asthma" aria-pressed="false" onclick="window.__vs.toggleFactor('asthma',this)">Asthma / Respiratory</button>
@@ -242,7 +252,7 @@ ul.list li{margin-bottom:6px}
 <div class="banner">
 <div class="row" style="align-items:baseline;gap:8px">
 <span id="heroAqi" class="num">385</span>
-<span class="sub" id="metaSummary">AQI • 24°C • Severe Smog</span>
+<span class="sub" id="metaSummary">AQI • 24°C • 7 km/h • Severe Smog</span>
 </div>
 <span id="tierBadge" class="tier t-sev">SEVERE SMOG</span>
 </div>
@@ -251,13 +261,15 @@ ul.list li{margin-bottom:6px}
 <div class="pol"><small>PM10 Estimate</small><b id="p10">346 µg/m³</b></div>
 <div class="pol"><small>NO2 Estimate</small><b id="no2">78 ppb</b></div>
 <div class="pol"><small>O3 Estimate</small><b id="o3">44 ppb</b></div>
+<div class="pol"><small>Wind Speed</small><b id="windRead">7 km/h</b></div>
+<div class="pol"><small>Dispersion State</small><b id="windDisp">Stagnant • Low</b></div>
 </div>
 <div class="kpis">
 <div class="kpi"><small>Safe Outdoor Limit (No N95)</small><b id="outLimit">15 mins max</b></div>
 <div class="kpi"><small>Recommended Purifier Mode</small><b id="purMode">Turbo HEPA • 24/7</b></div>
 </div>
 <div class="prec-box">
-<div class="prec-title">Key Smog &amp; Temperature Precautions</div>
+<div class="prec-title">Key Smog, Wind &amp; Temperature Precautions</div>
 <ul id="precList" class="list" style="margin-top:4px"></ul>
 </div>
 </section>
@@ -299,87 +311,87 @@ ul.list li{margin-bottom:6px}
 const KEY_STORE="vayushield_v21_key";
 const MODEL="gemini-3-flash-preview";
 const DIRECTORY=[
-{name:"New Delhi",region:"Delhi NCR",aliases:["delhi"],aqi:385,temp:24,smog:"Severe Smog"},
-{name:"Gurugram, Haryana",region:"Delhi NCR District",aliases:["gurgaon"],aqi:342,temp:24,smog:"Severe Smog"},
-{name:"Noida, Uttar Pradesh",region:"Delhi NCR District",aliases:[],aqi:356,temp:24,smog:"Severe Smog"},
-{name:"Faridabad, Haryana",region:"Delhi NCR District",aliases:[],aqi:328,temp:25,smog:"Severe Smog"},
-{name:"Ghaziabad, Uttar Pradesh",region:"Delhi NCR District",aliases:[],aqi:364,temp:24,smog:"Severe Smog"},
-{name:"Mumbai, Maharashtra",region:"Mumbai Suburban & City",aliases:["bombay"],aqi:168,temp:30,smog:"Light Haze"},
-{name:"Thane, Maharashtra",region:"Konkan District",aliases:[],aqi:154,temp:30,smog:"Light Haze"},
-{name:"Navi Mumbai, Maharashtra",region:"Konkan District",aliases:[],aqi:162,temp:30,smog:"Light Haze"},
-{name:"Pune, Maharashtra",region:"Pune District",aliases:["poona"],aqi:96,temp:26,smog:"Clear Air"},
-{name:"Nagpur, Maharashtra",region:"Vidarbha District",aliases:[],aqi:124,temp:28,smog:"Light Haze"},
-{name:"Nashik, Maharashtra",region:"North Maharashtra District",aliases:[],aqi:88,temp:26,smog:"Clear Air"},
-{name:"Chhatrapati Sambhajinagar, Maharashtra",region:"Marathwada District",aliases:["aurangabad"],aqi:104,temp:28,smog:"Light Haze"},
-{name:"Kannur, Kerala",region:"Malabar District",aliases:["cannanore"],aqi:68,temp:29,smog:"Clear Air"},
-{name:"Kochi, Kerala",region:"Ernakulam District",aliases:["cochin"],aqi:64,temp:30,smog:"Clear Air"},
-{name:"Thiruvananthapuram, Kerala",region:"Capital District",aliases:["trivandrum","thiruvananthapuram kerala"],aqi:58,temp:30,smog:"Clear Air"},
-{name:"Kozhikode, Kerala",region:"Malabar District",aliases:["calicut"],aqi:66,temp:29,smog:"Clear Air"},
-{name:"Thrissur, Kerala",region:"Central Kerala District",aliases:["trichur"],aqi:62,temp:29,smog:"Clear Air"},
-{name:"Alappuzha, Kerala",region:"Coastal District",aliases:["alleppey"],aqi:56,temp:30,smog:"Clear Air"},
-{name:"Palakkad, Kerala",region:"Palakkad Gap District",aliases:["palghat"],aqi:72,temp:31,smog:"Clear Air"},
-{name:"Kollam, Kerala",region:"Coastal District",aliases:["quilon"],aqi:60,temp:30,smog:"Clear Air"},
-{name:"Bengaluru, Karnataka",region:"Bengaluru Urban District",aliases:["bangalore"],aqi:74,temp:25,smog:"Clear Air"},
-{name:"Mysuru, Karnataka",region:"Mysuru District",aliases:["mysore"],aqi:69,temp:26,smog:"Clear Air"},
-{name:"Mangaluru, Karnataka",region:"Dakshina Kannada District",aliases:["mangalore"],aqi:65,temp:29,smog:"Clear Air"},
-{name:"Hubballi-Dharwad, Karnataka",region:"Dharwad District",aliases:["hubli","dharwad"],aqi:84,temp:27,smog:"Clear Air"},
-{name:"Belagavi, Karnataka",region:"Belagavi District",aliases:["belgaum"],aqi:79,temp:26,smog:"Clear Air"},
-{name:"Chennai, Tamil Nadu",region:"Chennai District",aliases:["madras"],aqi:112,temp:31,smog:"Light Haze"},
-{name:"Coimbatore, Tamil Nadu",region:"Coimbatore District",aliases:[],aqi:76,temp:28,smog:"Clear Air"},
-{name:"Madurai, Tamil Nadu",region:"Madurai District",aliases:[],aqi:89,temp:31,smog:"Clear Air"},
-{name:"Tiruchirappalli, Tamil Nadu",region:"Tiruchirappalli District",aliases:["trichy"],aqi:82,temp:31,smog:"Clear Air"},
-{name:"Salem, Tamil Nadu",region:"Salem District",aliases:[],aqi:86,temp:30,smog:"Clear Air"},
-{name:"Hyderabad, Telangana",region:"Hyderabad District",aliases:[],aqi:118,temp:28,smog:"Light Haze"},
-{name:"Warangal, Telangana",region:"Warangal District",aliases:[],aqi:106,temp:28,smog:"Light Haze"},
-{name:"Visakhapatnam, Andhra Pradesh",region:"Coastal District",aliases:["vizag"],aqi:94,temp:29,smog:"Clear Air"},
-{name:"Vijayawada, Andhra Pradesh",region:"NTR District",aliases:[],aqi:114,temp:30,smog:"Light Haze"},
-{name:"Tirupati, Andhra Pradesh",region:"Tirupati District",aliases:[],aqi:85,temp:29,smog:"Clear Air"},
-{name:"Kolkata, West Bengal",region:"Kolkata District",aliases:["calcutta"],aqi:245,temp:27,smog:"Dense Smog"},
-{name:"Howrah, West Bengal",region:"Howrah District",aliases:[],aqi:252,temp:27,smog:"Dense Smog"},
-{name:"Asansol, West Bengal",region:"Paschim Bardhaman District",aliases:[],aqi:228,temp:26,smog:"Dense Smog"},
-{name:"Siliguri, West Bengal",region:"Darjeeling / Jalpaiguri",aliases:[],aqi:118,temp:22,smog:"Light Haze"},
-{name:"Varanasi, Uttar Pradesh",region:"Varanasi District",aliases:["banaras","kashi"],aqi:312,temp:23,smog:"Severe Smog"},
-{name:"Lucknow, Uttar Pradesh",region:"Lucknow District",aliases:[],aqi:286,temp:24,smog:"Dense Smog"},
-{name:"Kanpur, Uttar Pradesh",region:"Kanpur Nagar District",aliases:[],aqi:298,temp:24,smog:"Dense Smog"},
-{name:"Agra, Uttar Pradesh",region:"Agra District",aliases:[],aqi:274,temp:25,smog:"Dense Smog"},
-{name:"Prayagraj, Uttar Pradesh",region:"Prayagraj District",aliases:["allahabad"],aqi:282,temp:24,smog:"Dense Smog"},
-{name:"Gorakhpur, Uttar Pradesh",region:"Gorakhpur District",aliases:[],aqi:248,temp:24,smog:"Dense Smog"},
-{name:"Patna, Bihar",region:"Patna District",aliases:[],aqi:318,temp:24,smog:"Severe Smog"},
-{name:"Gaya, Bihar",region:"Gaya District",aliases:[],aqi:276,temp:25,smog:"Dense Smog"},
-{name:"Muzaffarpur, Bihar",region:"Muzaffarpur District",aliases:[],aqi:292,temp:24,smog:"Dense Smog"},
-{name:"Ranchi, Jharkhand",region:"Ranchi District",aliases:[],aqi:146,temp:23,smog:"Light Haze"},
-{name:"Jamshedpur, Jharkhand",region:"East Singhbhum District",aliases:[],aqi:164,temp:25,smog:"Light Haze"},
-{name:"Bhubaneswar, Odisha",region:"Khordha District",aliases:[],aqi:132,temp:28,smog:"Light Haze"},
-{name:"Cuttack, Odisha",region:"Cuttack District",aliases:[],aqi:138,temp:28,smog:"Light Haze"},
-{name:"Jaipur, Rajasthan",region:"Jaipur District",aliases:[],aqi:194,temp:27,smog:"Light Haze"},
-{name:"Jodhpur, Rajasthan",region:"Jodhpur District",aliases:[],aqi:162,temp:28,smog:"Light Haze"},
-{name:"Udaipur, Rajasthan",region:"Udaipur District",aliases:[],aqi:118,temp:25,smog:"Light Haze"},
-{name:"Kota, Rajasthan",region:"Kota District",aliases:[],aqi:176,temp:27,smog:"Light Haze"},
-{name:"Ahmedabad, Gujarat",region:"Ahmedabad District",aliases:[],aqi:178,temp:30,smog:"Light Haze"},
-{name:"Surat, Gujarat",region:"Surat District",aliases:[],aqi:148,temp:30,smog:"Light Haze"},
-{name:"Vadodara, Gujarat",region:"Vadodara District",aliases:["baroda"],aqi:156,temp:29,smog:"Light Haze"},
-{name:"Rajkot, Gujarat",region:"Rajkot District",aliases:[],aqi:134,temp:29,smog:"Light Haze"},
-{name:"Indore, Madhya Pradesh",region:"Indore District",aliases:[],aqi:142,temp:26,smog:"Light Haze"},
-{name:"Bhopal, Madhya Pradesh",region:"Bhopal District",aliases:[],aqi:152,temp:25,smog:"Light Haze"},
-{name:"Jabalpur, Madhya Pradesh",region:"Jabalpur District",aliases:[],aqi:136,temp:25,smog:"Light Haze"},
-{name:"Raipur, Chhattisgarh",region:"Raipur District",aliases:[],aqi:172,temp:27,smog:"Light Haze"},
-{name:"Chandigarh",region:"Chandigarh UT",aliases:[],aqi:218,temp:22,smog:"Dense Smog"},
-{name:"Ludhiana, Punjab",region:"Ludhiana District",aliases:[],aqi:264,temp:22,smog:"Dense Smog"},
-{name:"Amritsar, Punjab",region:"Amritsar District",aliases:[],aqi:238,temp:21,smog:"Dense Smog"},
-{name:"Jalandhar, Punjab",region:"Jalandhar District",aliases:[],aqi:224,temp:22,smog:"Dense Smog"},
-{name:"Panipat, Haryana",region:"Panipat District",aliases:[],aqi:288,temp:23,smog:"Dense Smog"},
-{name:"Hisar, Haryana",region:"Hisar District",aliases:[],aqi:256,temp:24,smog:"Dense Smog"},
-{name:"Dehradun, Uttarakhand",region:"Dehradun District",aliases:[],aqi:128,temp:20,smog:"Light Haze"},
-{name:"Shimla, Himachal Pradesh",region:"Shimla District",aliases:[],aqi:54,temp:14,smog:"Clear Air"},
-{name:"Srinagar, Jammu & Kashmir",region:"Srinagar District",aliases:[],aqi:78,temp:11,smog:"Clear Air"},
-{name:"Jammu, Jammu & Kashmir",region:"Jammu District",aliases:[],aqi:144,temp:22,smog:"Light Haze"},
-{name:"Guwahati, Assam",region:"Kamrup Metropolitan",aliases:[],aqi:136,temp:25,smog:"Light Haze"},
-{name:"Imphal, Manipur",region:"Imphal West District",aliases:[],aqi:72,temp:21,smog:"Clear Air"},
-{name:"Shillong, Meghalaya",region:"East Khasi Hills",aliases:[],aqi:52,temp:16,smog:"Clear Air"},
-{name:"Aizawl, Mizoram",region:"Aizawl District",aliases:[],aqi:48,temp:19,smog:"Clear Air"},
-{name:"Agartala, Tripura",region:"West Tripura District",aliases:[],aqi:98,temp:26,smog:"Clear Air"},
-{name:"Gangtok, Sikkim",region:"Gangtok District",aliases:[],aqi:46,temp:13,smog:"Clear Air"},
-{name:"Panaji, Goa",region:"North Goa District",aliases:["panjim"],aqi:62,temp:30,smog:"Clear Air"}
+{name:"New Delhi",region:"Delhi NCR",aliases:["delhi"],aqi:385,temp:24,wind:7,smog:"Severe Smog"},
+{name:"Gurugram, Haryana",region:"Delhi NCR District",aliases:["gurgaon"],aqi:342,temp:24,wind:8,smog:"Severe Smog"},
+{name:"Noida, Uttar Pradesh",region:"Delhi NCR District",aliases:[],aqi:356,temp:24,wind:7,smog:"Severe Smog"},
+{name:"Faridabad, Haryana",region:"Delhi NCR District",aliases:[],aqi:328,temp:25,wind:8,smog:"Severe Smog"},
+{name:"Ghaziabad, Uttar Pradesh",region:"Delhi NCR District",aliases:[],aqi:364,temp:24,wind:7,smog:"Severe Smog"},
+{name:"Mumbai, Maharashtra",region:"Mumbai Suburban & City",aliases:["bombay"],aqi:168,temp:30,wind:16,smog:"Light Haze"},
+{name:"Thane, Maharashtra",region:"Konkan District",aliases:[],aqi:154,temp:30,wind:14,smog:"Light Haze"},
+{name:"Navi Mumbai, Maharashtra",region:"Konkan District",aliases:[],aqi:162,temp:30,wind:15,smog:"Light Haze"},
+{name:"Pune, Maharashtra",region:"Pune District",aliases:["poona"],aqi:96,temp:26,wind:13,smog:"Clear Air"},
+{name:"Nagpur, Maharashtra",region:"Vidarbha District",aliases:[],aqi:124,temp:28,wind:11,smog:"Light Haze"},
+{name:"Nashik, Maharashtra",region:"North Maharashtra District",aliases:[],aqi:88,temp:26,wind:12,smog:"Clear Air"},
+{name:"Chhatrapati Sambhajinagar, Maharashtra",region:"Marathwada District",aliases:["aurangabad"],aqi:104,temp:28,wind:12,smog:"Light Haze"},
+{name:"Kannur, Kerala",region:"Malabar District",aliases:["cannanore"],aqi:68,temp:29,wind:15,smog:"Clear Air"},
+{name:"Kochi, Kerala",region:"Ernakulam District",aliases:["cochin"],aqi:64,temp:30,wind:16,smog:"Clear Air"},
+{name:"Thiruvananthapuram, Kerala",region:"Capital District",aliases:["trivandrum","thiruvananthapuram kerala"],aqi:58,temp:30,wind:15,smog:"Clear Air"},
+{name:"Kozhikode, Kerala",region:"Malabar District",aliases:["calicut"],aqi:66,temp:29,wind:14,smog:"Clear Air"},
+{name:"Thrissur, Kerala",region:"Central Kerala District",aliases:["trichur"],aqi:62,temp:29,wind:13,smog:"Clear Air"},
+{name:"Alappuzha, Kerala",region:"Coastal District",aliases:["alleppey"],aqi:56,temp:30,wind:17,smog:"Clear Air"},
+{name:"Palakkad, Kerala",region:"Palakkad Gap District",aliases:["palghat"],aqi:72,temp:31,wind:18,smog:"Clear Air"},
+{name:"Kollam, Kerala",region:"Coastal District",aliases:["quilon","kollam kerala"],aqi:60,temp:30,wind:16,smog:"Clear Air"},
+{name:"Bengaluru, Karnataka",region:"Bengaluru Urban District",aliases:["bangalore"],aqi:74,temp:25,wind:14,smog:"Clear Air"},
+{name:"Mysuru, Karnataka",region:"Mysuru District",aliases:["mysore"],aqi:69,temp:26,wind:12,smog:"Clear Air"},
+{name:"Mangaluru, Karnataka",region:"Dakshina Kannada District",aliases:["mangalore"],aqi:65,temp:29,wind:16,smog:"Clear Air"},
+{name:"Hubballi-Dharwad, Karnataka",region:"Dharwad District",aliases:["hubli","dharwad"],aqi:84,temp:27,wind:14,smog:"Clear Air"},
+{name:"Belagavi, Karnataka",region:"Belagavi District",aliases:["belgaum"],aqi:79,temp:26,wind:13,smog:"Clear Air"},
+{name:"Chennai, Tamil Nadu",region:"Chennai District",aliases:["madras"],aqi:112,temp:31,wind:17,smog:"Light Haze"},
+{name:"Coimbatore, Tamil Nadu",region:"Coimbatore District",aliases:[],aqi:76,temp:28,wind:15,smog:"Clear Air"},
+{name:"Madurai, Tamil Nadu",region:"Madurai District",aliases:[],aqi:89,temp:31,wind:12,smog:"Clear Air"},
+{name:"Tiruchirappalli, Tamil Nadu",region:"Tiruchirappalli District",aliases:["trichy"],aqi:82,temp:31,wind:13,smog:"Clear Air"},
+{name:"Salem, Tamil Nadu",region:"Salem District",aliases:[],aqi:86,temp:30,wind:12,smog:"Clear Air"},
+{name:"Hyderabad, Telangana",region:"Hyderabad District",aliases:[],aqi:118,temp:28,wind:12,smog:"Light Haze"},
+{name:"Warangal, Telangana",region:"Warangal District",aliases:[],aqi:106,temp:28,wind:11,smog:"Light Haze"},
+{name:"Visakhapatnam, Andhra Pradesh",region:"Coastal District",aliases:["vizag"],aqi:94,temp:29,wind:16,smog:"Clear Air"},
+{name:"Vijayawada, Andhra Pradesh",region:"NTR District",aliases:[],aqi:114,temp:30,wind:13,smog:"Light Haze"},
+{name:"Tirupati, Andhra Pradesh",region:"Tirupati District",aliases:[],aqi:85,temp:29,wind:12,smog:"Clear Air"},
+{name:"Kolkata, West Bengal",region:"Kolkata District",aliases:["calcutta"],aqi:245,temp:27,wind:9,smog:"Dense Smog"},
+{name:"Howrah, West Bengal",region:"Howrah District",aliases:[],aqi:252,temp:27,wind:9,smog:"Dense Smog"},
+{name:"Asansol, West Bengal",region:"Paschim Bardhaman District",aliases:[],aqi:228,temp:26,wind:10,smog:"Dense Smog"},
+{name:"Siliguri, West Bengal",region:"Darjeeling / Jalpaiguri",aliases:[],aqi:118,temp:22,wind:11,smog:"Light Haze"},
+{name:"Varanasi, Uttar Pradesh",region:"Varanasi District",aliases:["banaras","kashi"],aqi:312,temp:23,wind:7,smog:"Severe Smog"},
+{name:"Lucknow, Uttar Pradesh",region:"Lucknow District",aliases:[],aqi:286,temp:24,wind:8,smog:"Dense Smog"},
+{name:"Kanpur, Uttar Pradesh",region:"Kanpur Nagar District",aliases:[],aqi:298,temp:24,wind:8,smog:"Dense Smog"},
+{name:"Agra, Uttar Pradesh",region:"Agra District",aliases:[],aqi:274,temp:25,wind:9,smog:"Dense Smog"},
+{name:"Prayagraj, Uttar Pradesh",region:"Prayagraj District",aliases:["allahabad"],aqi:282,temp:24,wind:8,smog:"Dense Smog"},
+{name:"Gorakhpur, Uttar Pradesh",region:"Gorakhpur District",aliases:[],aqi:248,temp:24,wind:9,smog:"Dense Smog"},
+{name:"Patna, Bihar",region:"Patna District",aliases:[],aqi:318,temp:24,wind:7,smog:"Severe Smog"},
+{name:"Gaya, Bihar",region:"Gaya District",aliases:[],aqi:276,temp:25,wind:9,smog:"Dense Smog"},
+{name:"Muzaffarpur, Bihar",region:"Muzaffarpur District",aliases:[],aqi:292,temp:24,wind:8,smog:"Dense Smog"},
+{name:"Ranchi, Jharkhand",region:"Ranchi District",aliases:[],aqi:146,temp:23,wind:11,smog:"Light Haze"},
+{name:"Jamshedpur, Jharkhand",region:"East Singhbhum District",aliases:[],aqi:164,temp:25,wind:10,smog:"Light Haze"},
+{name:"Bhubaneswar, Odisha",region:"Khordha District",aliases:[],aqi:132,temp:28,wind:13,smog:"Light Haze"},
+{name:"Cuttack, Odisha",region:"Cuttack District",aliases:[],aqi:138,temp:28,wind:12,smog:"Light Haze"},
+{name:"Jaipur, Rajasthan",region:"Jaipur District",aliases:[],aqi:194,temp:27,wind:12,smog:"Light Haze"},
+{name:"Jodhpur, Rajasthan",region:"Jodhpur District",aliases:[],aqi:162,temp:28,wind:14,smog:"Light Haze"},
+{name:"Udaipur, Rajasthan",region:"Udaipur District",aliases:[],aqi:118,temp:25,wind:11,smog:"Light Haze"},
+{name:"Kota, Rajasthan",region:"Kota District",aliases:[],aqi:176,temp:27,wind:12,smog:"Light Haze"},
+{name:"Ahmedabad, Gujarat",region:"Ahmedabad District",aliases:[],aqi:178,temp:30,wind:13,smog:"Light Haze"},
+{name:"Surat, Gujarat",region:"Surat District",aliases:[],aqi:148,temp:30,wind:15,smog:"Light Haze"},
+{name:"Vadodara, Gujarat",region:"Vadodara District",aliases:["baroda"],aqi:156,temp:29,wind:13,smog:"Light Haze"},
+{name:"Rajkot, Gujarat",region:"Rajkot District",aliases:[],aqi:134,temp:29,wind:14,smog:"Light Haze"},
+{name:"Indore, Madhya Pradesh",region:"Indore District",aliases:[],aqi:142,temp:26,wind:12,smog:"Light Haze"},
+{name:"Bhopal, Madhya Pradesh",region:"Bhopal District",aliases:[],aqi:152,temp:25,wind:11,smog:"Light Haze"},
+{name:"Jabalpur, Madhya Pradesh",region:"Jabalpur District",aliases:[],aqi:136,temp:25,wind:11,smog:"Light Haze"},
+{name:"Raipur, Chhattisgarh",region:"Raipur District",aliases:[],aqi:172,temp:27,wind:10,smog:"Light Haze"},
+{name:"Chandigarh",region:"Chandigarh UT",aliases:[],aqi:218,temp:22,wind:9,smog:"Dense Smog"},
+{name:"Ludhiana, Punjab",region:"Ludhiana District",aliases:[],aqi:264,temp:22,wind:8,smog:"Dense Smog"},
+{name:"Amritsar, Punjab",region:"Amritsar District",aliases:[],aqi:238,temp:21,wind:9,smog:"Dense Smog"},
+{name:"Jalandhar, Punjab",region:"Jalandhar District",aliases:[],aqi:224,temp:22,wind:9,smog:"Dense Smog"},
+{name:"Panipat, Haryana",region:"Panipat District",aliases:[],aqi:288,temp:23,wind:8,smog:"Dense Smog"},
+{name:"Hisar, Haryana",region:"Hisar District",aliases:[],aqi:256,temp:24,wind:10,smog:"Dense Smog"},
+{name:"Dehradun, Uttarakhand",region:"Dehradun District",aliases:[],aqi:128,temp:20,wind:10,smog:"Light Haze"},
+{name:"Shimla, Himachal Pradesh",region:"Shimla District",aliases:[],aqi:54,temp:14,wind:12,smog:"Clear Air"},
+{name:"Srinagar, Jammu & Kashmir",region:"Srinagar District",aliases:[],aqi:78,temp:11,wind:8,smog:"Clear Air"},
+{name:"Jammu, Jammu & Kashmir",region:"Jammu District",aliases:[],aqi:144,temp:22,wind:9,smog:"Light Haze"},
+{name:"Guwahati, Assam",region:"Kamrup Metropolitan",aliases:[],aqi:136,temp:25,wind:10,smog:"Light Haze"},
+{name:"Imphal, Manipur",region:"Imphal West District",aliases:[],aqi:72,temp:21,wind:10,smog:"Clear Air"},
+{name:"Shillong, Meghalaya",region:"East Khasi Hills",aliases:[],aqi:52,temp:16,wind:12,smog:"Clear Air"},
+{name:"Aizawl, Mizoram",region:"Aizawl District",aliases:[],aqi:48,temp:19,wind:11,smog:"Clear Air"},
+{name:"Agartala, Tripura",region:"West Tripura District",aliases:[],aqi:98,temp:26,wind:11,smog:"Clear Air"},
+{name:"Gangtok, Sikkim",region:"Gangtok District",aliases:[],aqi:46,temp:13,wind:10,smog:"Clear Air"},
+{name:"Panaji, Goa",region:"North Goa District",aliases:["panjim"],aqi:62,temp:30,wind:16,smog:"Clear Air"}
 ];
 const TASKS=[
 "Seal window gaps and keep indoor doors closed during peak smog",
@@ -392,6 +404,7 @@ const state={
 city:"New Delhi",
 aqi:385,
 temp:24,
+wind:7,
 smog:"Auto",
 factors:{asthma:false,vulnerable:false,pets:false,ventilation:false,plants:false,commute:false},
 done:[false,false,false,false,false],
@@ -419,31 +432,26 @@ if(aqi<=300)return "Dense Smog";
 return "Severe Smog";
 }
 
-function estimateCustomPlace(query){
-const clean=query.trim().slice(0,60);
-let h=0;
-for(let i=0;i<clean.length;i++)h=(h*31+clean.charCodeAt(i))%10000;
-const aqi=52+(h%335);
-const temp=14+(h%22);
-const smog=aqi<=100?"Clear Air":aqi<=200?"Light Haze":aqi<=300?"Dense Smog":"Severe Smog";
-return{name:clean,region:"Indian District / Locality",aliases:[],aqi,temp,smog};
+function windDispFor(wind){
+if(wind<8)return "Stagnant • Low";
+if(wind<=15)return "Breezy • Moderate";
+return "Brisk • Dispersing";
 }
 
 function getMatches(rawQuery){
 const q=rawQuery.trim().toLowerCase();
 if(!q)return DIRECTORY.slice(0,8);
-const hits=DIRECTORY.filter(item=>{
-if(item.name.toLowerCase().includes(q)||item.region.toLowerCase().includes(q))return true;
+return DIRECTORY.filter(item=>{
+if(item.name.toLowerCase().includes(q)||item.region.toLowerCase().includes(q)||item.smog.toLowerCase().includes(q))return true;
 return Array.isArray(item.aliases)&&item.aliases.some(a=>a.includes(q)||q.includes(a));
-});
-if(hits.length>0)return hits.slice(0,10);
-return [estimateCustomPlace(rawQuery)];
+}).slice(0,10);
 }
 
 function selectLocation(loc){
 state.city=loc.name;
 state.aqi=loc.aqi;
 state.temp=loc.temp;
+state.wind=Number(loc.wind??12);
 state.smog="Auto";
 document.getElementById("smogLevel").value="Auto";
 state.aiText="";
@@ -457,7 +465,7 @@ const hero=document.getElementById("heroAqi");
 hero.classList.remove("pop");
 void hero.offsetWidth;
 hero.classList.add("pop");
-const msg=`Loaded ${loc.name} — AQI ${loc.aqi}, ${loc.temp}°C, ${loc.smog}.`;
+const msg=`Loaded ${loc.name} — AQI ${loc.aqi}, ${loc.temp}°C, Wind ${state.wind} km/h, ${loc.smog}.`;
 document.getElementById("statusMsg").textContent=msg;
 document.getElementById("srLive").textContent=msg;
 }
@@ -466,32 +474,42 @@ function renderSearchResults(){
 const q=document.getElementById("placeSearch").value;
 const matches=getMatches(q);
 const box=document.getElementById("searchResults");
+if(!matches.length){
+box.innerHTML=`<div class="empty-res">No matching Indian city or district found for "${esc(q.trim())}". Try Kollam, Kannur, Varanasi, or Hyderabad.</div>`;
+window.__vs._matches=[];
+return;
+}
 box.innerHTML=matches.map((item,idx)=>{
 const active=item.name.toLowerCase()===state.city.toLowerCase();
-return `<button type="button" class="res-item ${active?"sel":""}" onclick="window.__vs.pickResult(${idx})"><div><b>${esc(item.name)}</b><small>${esc(item.region)} • ${esc(item.smog)}</small></div><span class="pill">AQI ${item.aqi} • ${item.temp}°C</span></button>`;
+return `<button type="button" class="res-item ${active?"sel":""}" onclick="window.__vs.pickResult(${idx})"><div><b>${esc(item.name)}</b><small>${esc(item.region)} • ${esc(item.smog)}</small></div><span class="pill">AQI ${item.aqi} • ${item.temp}°C • ${item.wind}km/h</span></button>`;
 }).join("");
 window.__vs._matches=matches;
 }
 
-function compute(city,aqi,temp,smogOpt,factors){
+function compute(city,aqi,temp,wind,smogOpt,factors){
 const cleanAqi=Math.min(500,Math.max(10,Math.round(Number(aqi)||0)));
 const cleanTemp=Math.min(46,Math.max(8,Math.round(Number(temp)||24)));
+const cleanWind=Math.min(45,Math.max(1,Math.round(Number(wind)||12)));
 const smogText=smogLabelFor(cleanAqi,smogOpt);
+const windDisp=windDispFor(cleanWind);
 const fKey=[factors.asthma?1:0,factors.vulnerable?1:0,factors.pets?1:0,factors.ventilation?1:0,factors.plants?1:0,factors.commute?1:0].join("");
-const k=`${city}|${cleanAqi}|${cleanTemp}|${smogText}|${fKey}`;
+const k=`${city}|${cleanAqi}|${cleanTemp}|${cleanWind}|${smogText}|${fKey}`;
 if(cache.has(k))return{...cache.get(k),hit:true};
 
 const t0=performance.now();
 const tier=tierFor(cleanAqi);
-const pm25=Math.max(5,Math.round(cleanAqi*.6));
-const pm10=Math.max(10,Math.round(cleanAqi*.9));
-const no2Val=Math.max(8,Math.round(cleanAqi*.2+(factors.commute?12:0)));
+const windFactor=cleanWind>=18?.9:cleanWind<8?1.08:1;
+const pm25=Math.max(5,Math.round(cleanAqi*.6*windFactor));
+const pm10=Math.max(10,Math.round(cleanAqi*.9*(cleanWind>22?1.06:windFactor)));
+const no2Val=Math.max(8,Math.round((cleanAqi*.2+(factors.commute?12:0))*(cleanWind<8?1.1:1)));
 const o3Val=Math.max(14,Math.round(28+(cleanAqi%35)*.6+(cleanTemp>32?6:0)));
 
 let mins=120;
 if(cleanAqi>300)mins=15;
 else if(cleanAqi>200)mins=30;
 else if(cleanAqi>100)mins=60;
+if(cleanWind<8&&cleanAqi>150)mins=Math.max(5,Math.round(mins*.8));
+else if(cleanWind>=18)mins=Math.min(180,Math.round(mins*1.15));
 if(factors.asthma)mins=Math.max(5,Math.round(mins*.5));
 if(factors.vulnerable)mins=Math.max(5,Math.round(mins*.65));
 if(factors.commute)mins=Math.max(5,Math.round(mins*.75));
@@ -500,11 +518,11 @@ const outLimit=mins>=120?"2+ hrs safe":`${mins} mins max`;
 
 let purMode="Auto Eco • Standby";
 if(cleanAqi>300||factors.asthma||factors.vulnerable)purMode="Turbo HEPA • 24/7";
-else if(cleanAqi>150||factors.pets)purMode="High HEPA • Active";
+else if(cleanAqi>150||factors.pets||(cleanWind<7&&cleanAqi>100))purMode="High HEPA • Active";
 else if(cleanAqi>80)purMode="Medium HEPA • Quiet";
 
 const mults=[1.14,1.22,1.28,1.18,.98,.84,.76,.82,.95,1.12,1.24,1.19];
-const slots=mults.map((m,i)=>({lbl:`${String(i*2).padStart(2,"0")}:00`,val:Math.min(500,Math.max(15,Math.round(cleanAqi*m)))}));
+const slots=mults.map((m,i)=>({lbl:`${String(i*2).padStart(2,"0")}:00`,val:Math.min(500,Math.max(15,Math.round(cleanAqi*m*windFactor)))}));
 let bestIdx=6,bestSum=Infinity;
 for(let i=0;i<slots.length-1;i++){
 const s=slots[i].val+slots[i+1].val;
@@ -514,13 +532,16 @@ const safeLbl=`Safest Window: ${String(bestIdx*2).padStart(2,"0")}:00–${String
 
 const precautions=[];
 precautions.push(cleanAqi>200?`Wear a snug N95/FFP2 mask outdoors in ${city} (${smogText}).`:`Keep a mask handy in ${city} near traffic or dusty roads.`);
+precautions.push(cleanWind<8?`Low wind (${cleanWind} km/h): air is stagnant—smog lingers longer near roads and low-lying areas.`:cleanWind>22?`Strong wind (${cleanWind} km/h): disperses smog faster but can kick up surface dust and grit.`:`Moderate wind (${cleanWind} km/h) supports steady air movement.`);
 precautions.push(cleanTemp>=35?`High heat (${cleanTemp}°C): hydrate often and avoid midday heat peaks.`:cleanTemp<=16?`Cool air (${cleanTemp}°C) can trap smog low—dress warmly and avoid early fog.`:`Temperature at ${cleanTemp}°C: ventilate indoors only during clean windows.`);
 precautions.push("Wash face, eyes, and exposed hands after returning outdoors.");
 
 const steps=[];
-if(cleanAqi>250)steps.push(`Use a snug N95/FFP2 mask outdoors in ${city} (${smogText}, ${cleanTemp}°C) and keep exertion low.`);
-else if(cleanAqi>100)steps.push(`Limit intense outdoor exercise in ${city} (${smogText}, ${cleanTemp}°C); prefer indoor or brief sessions.`);
-else steps.push(`Air quality in ${city} (${smogText}, ${cleanTemp}°C) supports normal outdoor activity with basic awareness.`);
+if(cleanAqi>250)steps.push(`Use a snug N95/FFP2 mask outdoors in ${city} (${smogText}, ${cleanTemp}°C, wind ${cleanWind} km/h) and keep exertion low.`);
+else if(cleanAqi>100)steps.push(`Limit intense outdoor exercise in ${city} (${smogText}, ${cleanTemp}°C, wind ${cleanWind} km/h); prefer indoor or brief sessions.`);
+else steps.push(`Air quality in ${city} (${smogText}, ${cleanTemp}°C, wind ${cleanWind} km/h) supports normal outdoor activity with basic awareness.`);
+if(cleanWind<8)steps.push("Low wind stagnation: avoid ground-level idling traffic corridors and run indoor air purification.");
+else if(cleanWind>22)steps.push("Gusty wind alert: shield eyes from windblown dust and secure loose outdoor items.");
 if(factors.ventilation)steps.push("Cross-ventilation active: keep street-facing windows shut during peak smog and open only in the safest window.");
 else steps.push("Keep windows closed during peak smog hours and run indoor air recirculation.");
 if(factors.asthma||factors.vulnerable)steps.push("Keep prescribed inhalers/medications nearby and watch for early airway irritation.");
@@ -529,7 +550,7 @@ if(factors.plants)steps.push("Mist indoor plants lightly for dust control while 
 if(factors.commute)steps.push("For open/bike commutes, wear eye protection + respirator and wash face after arriving.");
 
 const ms=Math.max(.2,Number((performance.now()-t0).toFixed(2)));
-const out={city,aqi:cleanAqi,temp:cleanTemp,smogText,tier,pm25,pm10,no2Val,o3Val,outLimit,purMode,slots,bestIdx,safeLbl,precautions,steps,ms,hit:false};
+const out={city,aqi:cleanAqi,temp:cleanTemp,wind:cleanWind,windDisp,smogText,tier,pm25,pm10,no2Val,o3Val,outLimit,purMode,slots,bestIdx,safeLbl,precautions,steps,ms,hit:false};
 cache.set(k,out);
 return out;
 }
@@ -553,15 +574,17 @@ p.className=has?"pill ok":"pill";
 }
 
 function render(){
-const m=compute(state.city,state.aqi,state.temp,state.smog,state.factors);
+const m=compute(state.city,state.aqi,state.temp,state.wind,state.smog,state.factors);
 document.getElementById("indexTitle").textContent=`${m.city} Live Index`;
 document.getElementById("heroAqi").textContent=String(m.aqi);
-document.getElementById("metaSummary").textContent=`AQI • ${m.temp}°C • ${m.smogText}`;
+document.getElementById("metaSummary").textContent=`AQI • ${m.temp}°C • ${m.wind} km/h • ${m.smogText}`;
 document.getElementById("smogVal").textContent=state.smog;
 document.getElementById("aqiVal").textContent=`${m.aqi} AQI`;
 document.getElementById("aqiRange").value=String(m.aqi);
 document.getElementById("tempVal").textContent=`${m.temp}°C`;
 document.getElementById("tempRange").value=String(m.temp);
+document.getElementById("windVal").textContent=`${m.wind} km/h`;
+document.getElementById("windRange").value=String(m.wind);
 
 const b=document.getElementById("tierBadge");
 b.textContent=m.tier.label;
@@ -571,6 +594,8 @@ document.getElementById("p25").textContent=`${m.pm25} µg/m³`;
 document.getElementById("p10").textContent=`${m.pm10} µg/m³`;
 document.getElementById("no2").textContent=`${m.no2Val} ppb`;
 document.getElementById("o3").textContent=`${m.o3Val} ppb`;
+document.getElementById("windRead").textContent=`${m.wind} km/h`;
+document.getElementById("windDisp").textContent=m.windDisp;
 document.getElementById("outLimit").textContent=m.outLimit;
 document.getElementById("purMode").textContent=m.purMode;
 document.getElementById("perfChip").textContent=`Render: ${m.ms}ms`;
@@ -606,17 +631,17 @@ syncKeyPill();
 }
 
 function alertText(){
-const m=compute(state.city,state.aqi,state.temp,state.smog,state.factors);
+const m=compute(state.city,state.aqi,state.temp,state.wind,state.smog,state.factors);
 const active=Object.entries(state.factors).filter(([,v])=>v).map(([k])=>k);
-return `VayuShield Alert — ${m.city} AQI ${m.aqi} (${m.tier.label}, ${m.smogText}, ${m.temp}°C) • PM2.5 ${m.pm25} µg/m³ • Limit: ${m.outLimit} • ${m.purMode} • ${m.safeLbl} • Flags: ${active.length?active.join(", "):"none"}`;
+return `VayuShield Alert — ${m.city} AQI ${m.aqi} (${m.tier.label}, ${m.smogText}, ${m.temp}°C, Wind ${m.wind} km/h) • PM2.5 ${m.pm25} µg/m³ • Limit: ${m.outLimit} • ${m.purMode} • ${m.safeLbl} • Flags: ${active.length?active.join(", "):"none"}`;
 }
 
 async function runAi(){
 const msg=document.getElementById("statusMsg");
 const key=sessionStorage.getItem(KEY_STORE);
-const m=compute(state.city,state.aqi,state.temp,state.smog,state.factors);
+const m=compute(state.city,state.aqi,state.temp,state.wind,state.smog,state.factors);
 if(!key){
-state.aiText=`Gemini 3 Flash Guardrail (${m.city}, AQI ${m.aqi}, ${m.smogText}, ${m.temp}°C): Keep indoor air clean with ${m.purMode} and target ${m.safeLbl} for brief essential outings.`;
+state.aiText=`Gemini 3 Flash Guardrail (${m.city}, AQI ${m.aqi}, ${m.smogText}, ${m.temp}°C, Wind ${m.wind} km/h): Keep indoor air clean with ${m.purMode} and target ${m.safeLbl} for brief essential outings.`;
 msg.textContent="No session key set — applied instant local Gemini-style guardrail.";
 render();
 return;
@@ -626,7 +651,7 @@ const timer=setTimeout(()=>ac.abort(),2500);
 msg.textContent="Contacting Gemini 3 Flash (2.5s timeout guardrail)...";
 try{
 const url=`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${encodeURIComponent(key)}`;
-const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},signal:ac.signal,body:JSON.stringify({contents:[{parts:[{text:`Give 2 brief smog and heat protection tips for ${m.city} AQI ${m.aqi}, ${m.smogText}, ${m.temp}C, flags ${JSON.stringify(state.factors)}.`}]}]})});
+const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},signal:ac.signal,body:JSON.stringify({contents:[{parts:[{text:`Give 2 brief smog, wind, and heat protection tips for ${m.city} AQI ${m.aqi}, ${m.smogText}, ${m.temp}C, wind ${m.wind} km/h, flags ${JSON.stringify(state.factors)}.`}]}]})});
 clearTimeout(timer);
 if(!r.ok)throw new Error("HTTP "+r.status);
 const d=await r.json();
@@ -645,26 +670,26 @@ render();
 function runTests(){
 const base={asthma:false,vulnerable:false,pets:false,ventilation:false,plants:false,commute:false};
 const t=[];
-const a=compute("Delhi",385,24,"Auto",base);
+const a=compute("Delhi",385,24,7,"Auto",base);
 t.push({n:"1. Severe Tier",ok:a.tier.label==="SEVERE SMOG",d:a.tier.label});
-const b=compute("Blr",74,25,"Auto",base);
+const b=compute("Blr",74,25,14,"Auto",base);
 t.push({n:"2. Satisfactory Tier",ok:b.tier.label==="SATISFACTORY",d:b.tier.label});
-const c=compute("X",200,26,"Auto",base);
+const c=compute("X",200,26,12,"Auto",base);
 t.push({n:"3. PM2.5 Ratio",ok:c.pm25===120,d:`${c.pm25} µg/m³`});
 t.push({n:"4. PM10 Ratio",ok:c.pm10===180,d:`${c.pm10} µg/m³`});
-const d1=parseInt(compute("Y",420,25,"Auto",base).outLimit,10);
-const d2=parseInt(compute("Y",420,25,"Auto",{...base,asthma:true}).outLimit,10);
+const d1=parseInt(compute("Y",420,25,12,"Auto",base).outLimit,10);
+const d2=parseInt(compute("Y",420,25,12,"Auto",{...base,asthma:true}).outLimit,10);
 t.push({n:"5. Asthma Guardrail",ok:d2<=d1,d:`${d2}m vs ${d1}m`});
 t.push({n:"6. 12 Time Slots",ok:a.slots.length===12,d:`${a.slots.length} slots`});
-compute("MemoX",160,28,"Auto",base);
-const m2=compute("MemoX",160,28,"Auto",base);
+compute("MemoX",160,28,14,"Auto",base);
+const m2=compute("MemoX",160,28,14,"Auto",base);
 t.push({n:"7. Cache Hit",ok:m2.hit===true,d:"Verified"});
 const x=esc("<script>1<\/script>");
 t.push({n:"8. XSS Escaped",ok:!x.includes("<script>")&&x.includes("&lt;script&gt;"),d:"Safe"});
-t.push({n:"9. AQI Clamped",ok:compute("Z",999,25,"Auto",base).aqi===500&&compute("Z",-5,25,"Auto",base).aqi===10,d:"10..500"});
+t.push({n:"9. AQI Clamped",ok:compute("Z",999,25,12,"Auto",base).aqi===500&&compute("Z",-5,25,12,"Auto",base).aqi===10,d:"10..500"});
 t.push({n:"10. Speed <5ms",ok:a.ms<5,d:`${a.ms}ms`});
 t.push({n:"11. Alert Summary",ok:alertText().includes("VayuShield Alert"),d:"Ready"});
-t.push({n:"12. 5 Checklist Tasks",ok:TASKS.length===5,d:"5 tasks"});
+t.push({n:"12. Wind Speed Tracked",ok:a.wind===7&&a.windDisp.includes("Stagnant"),d:`${a.wind} km/h`});
 
 const pass=t.filter(x=>x.ok).length;
 const badge=document.getElementById("testBadge");
@@ -696,8 +721,8 @@ pickResult(idx){
 const item=window.__vs._matches[idx];
 if(item)selectLocation(item);
 },
-pickPreset(city,aqi,temp){
-selectLocation({name:city,aqi:Number(aqi),temp:Number(temp),smog:"Auto"});
+pickPreset(city,aqi,temp,wind){
+selectLocation({name:city,aqi:Number(aqi),temp:Number(temp),wind:Number(wind),smog:"Auto"});
 },
 setSmog(val){
 state.smog=val;
@@ -714,6 +739,11 @@ state.temp=Number(val);
 state.aiText="";
 render();
 },
+setWind(val){
+state.wind=Number(val);
+state.aiText="";
+render();
+},
 toggleFactor(f,btn){
 if(!(f in state.factors))return;
 state.factors[f]=!state.factors[f];
@@ -723,7 +753,7 @@ render();
 },
 updatePlan(){
 render();
-const m=`Updated plan for ${state.city} (AQI ${state.aqi}, ${state.temp}°C).`;
+const m=`Updated plan for ${state.city} (AQI ${state.aqi}, ${state.temp}°C, Wind ${state.wind} km/h).`;
 document.getElementById("statusMsg").textContent=m;
 document.getElementById("srLive").textContent=m;
 },
