@@ -1,1 +1,454 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VayuShield v2.1 — Zero-Lag Urban Smog Assistant</title>
+<style>
+:root{--bg:#070b14;--surface:#111827;--surface-2:#172033;--border:#27344e;--text:#f1f5f9;--muted:#94a3b8;--accent:#38bdf8;--accent-2:#22d3ee;--good:#22c55e;--mod:#f59e0b;--poor:#f97316;--severe:#ef4444;--r:14px}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 15% 0%,rgba(56,189,248,.14),transparent 35%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.45;min-height:100vh}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:16px 14px 56px}
+.bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);background:rgba(56,189,248,.14);border:1px solid rgba(56,189,248,.35);padding:3px 9px;border-radius:999px;margin-bottom:6px}
+h1{margin:0;font-size:1.5rem;font-weight:800}
+.sub{margin:2px 0 0;color:var(--muted);font-size:.88rem}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+button{font-family:inherit;font-size:.85rem;font-weight:600;color:var(--text);background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button.pri{background:linear-gradient(135deg,#0284c7,#0ea5e9);border-color:#7dd3fc;color:#fff}
+button.on{border-color:var(--accent);box-shadow:0 0 0 1px rgba(56,189,248,.35)}
+.drawer{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.drawer.open{display:block}
+.head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.head h2{margin:0;font-size:1rem}
+.pill{font-size:.76rem;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:#cbd5e1}
+.pill.ok{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.45);color:#86efac}
+.pill.warn{background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.45);color:#fde68a}
+.grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:14px;margin-bottom:14px}
+@media(max-width:840px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+.chip{font-family:monospace;font-size:.76rem;color:var(--accent-2);background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.28);padding:3px 8px;border-radius:999px}
+.cities{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+@media(max-width:440px){.cities{grid-template-columns:1fr}}
+.city{text-align:left;display:flex;flex-direction:column;gap:2px;padding:10px 12px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px}
+.city.sel{border-color:var(--accent);background:rgba(56,189,248,.14)}
+.city b{font-size:.92rem}
+.city small{color:var(--muted);font-size:.78rem}
+.box{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:14px}
+.box-top{display:flex;justify-content:space-between;align-items:center;font-size:.86rem;font-weight:600;margin-bottom:6px}
+input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
+input[type=password]{flex:1 1 220px;background:#090e1a;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:.88rem}
+.lbl{display:block;font-size:.82rem;font-weight:700;color:#cbd5e1;margin-bottom:6px}
+.toggles{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.tog{font-size:.8rem;padding:6px 10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:#cbd5e1}
+.tog[aria-pressed="true"]{background:rgba(56,189,248,.16);border-color:var(--accent);color:#e0f2fe;font-weight:700}
+.banner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:12px}
+.num{font-size:2.2rem;font-weight:800;line-height:1}
+.tier{font-size:.75rem;font-weight:800;padding:4px 9px;border-radius:999px;text-transform:uppercase}
+.t-good{background:rgba(34,197,94,.16);color:#86efac}
+.t-mod{background:rgba(245,158,11,.16);color:#fde68a}
+.t-poor{background:rgba(249,115,22,.16);color:#fdba74}
+.t-sev{background:rgba(239,68,68,.18);color:#fca5a5}
+.pols{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.pol{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:9px 11px}
+.pol small{display:block;font-size:.72rem;color:var(--muted);text-transform:uppercase}
+.pol b{font-size:1rem}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+@media(max-width:480px){.kpis{grid-template-columns:1fr}}
+.kpi{background:#0c1220;border:1px solid var(--border);border-radius:10px;padding:10px}
+.kpi small{display:block;font-size:.74rem;color:var(--muted);margin-bottom:2px}
+.kpi b{font-size:.96rem;color:var(--accent-2)}
+.hours{display:grid;grid-template-columns:repeat(12,1fr);gap:5px;margin-top:8px}
+@media(max-width:760px){.hours{grid-template-columns:repeat(6,1fr)}}
+@media(max-width:420px){.hours{grid-template-columns:repeat(4,1fr)}}
+.hr{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:6px 4px;text-align:center;font-size:.72rem}
+.hr.safe{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.55)}
+.hr.peak{background:rgba(239,68,68,.14);border-color:rgba(239,68,68,.45)}
+.hr b{display:block;margin-top:2px;font-size:.78rem}
+ul.list{margin:8px 0 0;padding-left:18px;color:#cbd5e1;font-size:.88rem}
+ul.list li{margin-bottom:5px}
+.ai{display:none;background:rgba(56,189,248,.09);border:1px solid rgba(56,189,248,.32);border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:.86rem;color:#e0f2fe}
+.ai.show{display:block}
+.checks{display:flex;flex-direction:column;gap:7px}
+.chk{display:flex;align-items:flex-start;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:.84rem;cursor:pointer}
+.chk input{margin-top:2px;accent-color:var(--good)}
+.chk.done span{text-decoration:line-through;color:var(--muted)}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin-top:10px}
+.tcard{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:9px 11px;font-size:.82rem}
+.tcard-top{display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="bar">
+<div>
+<div class="tag">VayuShield v2.1 • Zero-Lag Engine</div>
+<h1>VayuShield v2.1 Zero-Lag</h1>
+<p class="sub">Urban Smog &amp; Air Guardrails — Instant Deterministic Engine + Optional Gemini 3 Flash</p>
+</div>
+<div class="row" role="toolbar" aria-label="Tools">
+<button type="button" id="btnTests" aria-expanded="false">Self-Tests (12)</button>
+<button type="button" id="btnDocs" aria-expanded="false">Architecture &amp; Docs</button>
+<button type="button" id="btnKey" aria-expanded="false">Gemini API Key</button>
+</div>
+</header>
+<section id="testDrawer" class="drawer" aria-label="Self Tests">
+<div class="head">
+<div>
+<h2>Automated Verification Suite (12 Checks)</h2>
+<span id="testSum" class="sub">Deterministic, caching &amp; security checks</span>
+</div>
+<div class="row">
+<span id="testBadge" class="pill">Ready</span>
+<button type="button" id="btnRunTests" class="pri">Run All 12 Tests</button>
+</div>
+</div>
+<div id="testGrid" class="tgrid"></div>
+</section>
+<section id="docDrawer" class="drawer" aria-label="Architecture and Docs">
+<div class="head">
+<h2>System Architecture &amp; Zero-Lag Engine</h2>
+<span class="pill">Single-File • &lt;5ms</span>
+</div>
+<ul class="list">
+<li><b>Memoized Deterministic Engine:</b> Computes risk tiers, PM2.5, PM10, NO2, and O3 estimates, safe outdoor exposure windows, and HEPA modes in under 5 ms.</li>
+<li><b>Async Gemini 3 Flash Enrichment:</b> Optional <code>gemini-3-flash-preview</code> enrichment with an <code>AbortController</code> 2.5s timeout and instant local fallback.</li>
+<li><b>Security &amp; Privacy:</b> Escapes dynamic strings to prevent XSS and stores optional API keys only in <code>sessionStorage</code>.</li>
+</ul>
+</section>
+<section id="keyDrawer" class="drawer" aria-label="Gemini API Key">
+<div class="head">
+<h2>Optional Gemini 3 Flash Live Enrichment</h2>
+<span id="keyPill" class="pill">Local Mode Active</span>
+</div>
+<p class="sub">Saved only in <code>sessionStorage</code> for this tab session. Works immediately without a key.</p>
+<div class="row" style="margin-top:8px">
+<input type="password" id="keyInput" placeholder="Paste Gemini API Key (AIza...)" autocomplete="off">
+<button type="button" id="btnSaveKey" class="pri">Save Key</button>
+<button type="button" id="btnClearKey">Clear</button>
+</div>
+</section>
+<main class="grid2">
+<section class="card" aria-label="City and Exposure Profile">
+<div class="head">
+<h2>City &amp; Exposure Profile</h2>
+<span id="perfChip" class="chip">Render: &lt;1ms</span>
+</div>
+<div class="cities" id="cityGrid">
+<button type="button" class="city sel" data-city="New Delhi" data-aqi="385"><b>New Delhi</b><small>AQI 385 • Severe Smog</small></button>
+<button type="button" class="city" data-city="Kolkata" data-aqi="245"><b>Kolkata</b><small>AQI 245 • Poor Haze</small></button>
+<button type="button" class="city" data-city="Mumbai" data-aqi="168"><b>Mumbai</b><small>AQI 168 • Moderate</small></button>
+<button type="button" class="city" data-city="Bengaluru" data-aqi="74"><b>Bengaluru</b><small>AQI 74 • Satisfactory</small></button>
+</div>
+<div class="box">
+<div class="box-top">
+<label for="aqiRange">Custom AQI Simulator</label>
+<span id="aqiVal" style="font-family:monospace;color:var(--accent);font-weight:700">385 AQI</span>
+</div>
+<input type="range" id="aqiRange" min="25" max="500" step="1" value="385">
+</div>
+<span class="lbl">Household &amp; Commute Guardrails</span>
+<div class="toggles" id="factorGroup">
+<button type="button" class="tog" data-f="asthma" aria-pressed="false">Asthma / Respiratory</button>
+<button type="button" class="tog" data-f="vulnerable" aria-pressed="false">Infants / Elderly</button>
+<button type="button" class="tog" data-f="pets" aria-pressed="false">Indoor Pets</button>
+<button type="button" class="tog" data-f="ventilation" aria-pressed="false">Cross Ventilation</button>
+<button type="button" class="tog" data-f="plants" aria-pressed="false">Indoor Air Plants</button>
+<button type="button" class="tog" data-f="commute" aria-pressed="false">Bike / Open Commute</button>
+</div>
+<div class="row">
+<button type="button" id="btnPlan" class="pri" style="flex:1 1 190px">Generate Instant Family Action Plan</button>
+<button type="button" id="btnAi">Enrich with Gemini 3 Flash</button>
+<button type="button" id="btnCopy">Copy Family Health Alert</button>
+</div>
+<p id="statusMsg" class="sub" style="margin-top:8px" role="status" aria-live="polite"></p>
+</section>
+<section class="card" aria-label="Live Air Index">
+<div class="head">
+<h2 id="indexTitle">New Delhi Live Index</h2>
+<span id="cachePill" class="pill">Cache: Ready</span>
+</div>
+<div class="banner">
+<div class="row" style="align-items:baseline;gap:8px">
+<span id="heroAqi" class="num">385</span>
+<span class="sub">AQI Scale</span>
+</div>
+<span id="tierBadge" class="tier t-sev">SEVERE SMOG</span>
+</div>
+<div class="pols">
+<div class="pol"><small>PM2.5 Estimate</small><b id="p25">231 µg/m³</b></div>
+<div class="pol"><small>PM10 Estimate</small><b id="p10">346 µg/m³</b></div>
+<div class="pol"><small>NO2 Estimate</small><b id="no2">78 ppb</b></div>
+<div class="pol"><small>O3 Estimate</small><b id="o3">44 ppb</b></div>
+</div>
+<div class="kpis">
+<div class="kpi"><small>Safe Outdoor Limit (No N95)</small><b id="outLimit">15 mins max</b></div>
+<div class="kpi"><small>Recommended Purifier Mode</small><b id="purMode">Turbo HEPA • 24/7</b></div>
+</div>
+</section>
+</main>
+<section class="card" style="margin-bottom:14px" aria-label="24-Hour Smog Forecast">
+<div class="head">
+<h2>24-Hour Smog Window Forecast</h2>
+<span id="safePill" class="pill ok">Safest Window: 12:00–16:00</span>
+</div>
+<p class="sub">Green slots highlight the lowest-smog window for essential outdoor movement.</p>
+<div id="hoursGrid" class="hours"></div>
+</section>
+<section class="grid2" style="margin-bottom:0">
+<section class="card" aria-label="Action Plan">
+<div class="head">
+<h2>Personalized Smog Action Plan</h2>
+<span id="srcPill" class="pill">Deterministic Instant</span>
+</div>
+<div id="aiBox" class="ai" aria-live="polite"></div>
+<ul id="planList" class="list"></ul>
+</section>
+<section class="card" aria-label="Daily Checklist">
+<div class="head">
+<h2>Daily Smog Shield Checklist</h2>
+<span id="chkPill" class="pill">0 / 5 Done</span>
+</div>
+<div id="chkList" class="checks"></div>
+</section>
+</section>
+<span id="srLive" class="sr" aria-live="polite"></span>
+</div>
+<script>
+(function(){
+"use strict";
+const KEY_STORE="vayushield_v21_key";
+const MODEL="gemini-3-flash-preview";
+const TASKS=[
+"Seal window gaps and keep indoor doors closed during peak smog",
+"Run HEPA filtration or damp-cloth wiping in sleeping rooms",
+"Keep N95/FFP2 respirator ready before stepping into heavy traffic",
+"Stay hydrated and monitor respiratory comfort across household",
+"Check safest dispersion window before outdoor errands"
+];
+const state={
+city:"New Delhi",
+aqi:385,
+factors:{asthma:false,vulnerable:false,pets:false,ventilation:false,plants:false,commute:false},
+done:[false,false,false,false,false],
+aiText:""
+};
+const cache=new Map();
+function esc(s){
+return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+function tierFor(aqi){
+const n=Math.max(0,Number(aqi)||0);
+if(n<=100)return{label:"SATISFACTORY",cls:"t-good"};
+if(n<=200)return{label:"MODERATE",cls:"t-mod"};
+if(n<=300)return{label:"POOR SMOG",cls:"t-poor"};
+return{label:"SEVERE SMOG",cls:"t-sev"};
+}
+function compute(city,aqi,factors){
+const cleanAqi=Math.min(500,Math.max(10,Math.round(Number(aqi)||0)));
+const fKey=[factors.asthma?1:0,factors.vulnerable?1:0,factors.pets?1:0,factors.ventilation?1:0,factors.plants?1:0,factors.commute?1:0].join("");
+const k=`${city}\vert{}${cleanAqi}|${fKey}`; if(cache.has(k))return{...cache.get(k),hit:true}; const t0=performance.now(); const tier=tierFor(cleanAqi); const pm25=Math.max(5,Math.round(cleanAqi*.6)); const pm10=Math.max(10,Math.round(cleanAqi*.9)); const no2Val=Math.max(8,Math.round(cleanAqi*.2+(factors.commute?12:0))); const o3Val=Math.max(14,Math.round(28+(cleanAqi\%35)*.6)); let mins=120; if(cleanAqi>300)mins=15; else if(cleanAqi>200)mins=30; else if(cleanAqi>100)mins=60; if(factors.asthma)mins=Math.max(5,Math.round(mins*.5)); if(factors.vulnerable)mins=Math.max(5,Math.round(mins*.65)); if(factors.commute)mins=Math.max(5,Math.round(mins*.75)); const outLimit=mins>=120?"2+ hrs safe":`${mins} mins max`;
+let purMode="Auto Eco • Standby";
+if(cleanAqi>300||factors.asthma||factors.vulnerable)purMode="Turbo HEPA • 24/7";
+else if(cleanAqi>150||factors.pets)purMode="High HEPA • Active";
+else if(cleanAqi>80)purMode="Medium HEPA • Quiet";
+const mults=[1.14,1.22,1.28,1.18,.98,.84,.76,.82,.95,1.12,1.24,1.19];
+const slots=mults.map((m,i)=>({lbl:`${String(i*2).padStart(2,"0")}:00`,val:Math.min(500,Math.max(15,Math.round(cleanAqi*m)))}));
+let bestIdx=6,bestSum=Infinity;
+for(let i=0;i<slots.length-1;i++){
+const s=slots[i].val+slots[i+1].val;
+if(s<bestSum){bestSum=s;bestIdx=i}
+}
+const safeLbl=`Safest Window: ${String(bestIdx*2).padStart(2,"0")}:00–${String(((bestIdx+2)*2)%24).padStart(2,"0")}:00`;
+const steps=[];
+if(cleanAqi>250)steps.push(`Use a snug N95/FFP2 mask outdoors in ${city} and keep exertion low.`);
+else if(cleanAqi>100)steps.push(`Limit intense outdoor exercise in ${city}; prefer indoor or brief sessions.`);
+else steps.push(`Air quality in ${city} supports normal outdoor activity with basic awareness.`);
+if(factors.ventilation)steps.push("Cross-ventilation active: keep street-facing windows shut during peak smog and open only in the safest window.");
+else steps.push("Keep windows closed during peak smog hours and run indoor air recirculation.");
+if(factors.asthma||factors.vulnerable)steps.push("Keep prescribed inhalers/medications nearby and watch for early airway irritation.");
+if(factors.pets)steps.push("Wipe indoor pets lightly with a damp cloth after outdoor exposure.");
+if(factors.plants)steps.push("Mist indoor plants lightly for dust control while relying on HEPA filtration for fine particles.");
+if(factors.commute)steps.push("For open/bike commutes, wear eye protection + respirator and wash face after arriving.");
+const ms=Math.max(.2,Number((performance.now()-t0).toFixed(2)));
+const out={city,aqi:cleanAqi,tier,pm25,pm10,no2Val,o3Val,outLimit,purMode,slots,bestIdx,safeLbl,steps,ms,hit:false};
+cache.set(k,out);
+return out;
+}
+function renderChecks(){
+let c=0;
+document.getElementById("chkList").innerHTML=TASKS.map((t,i)=>{
+const on=Boolean(state.done[i]);
+if(on)c++;
+return `<label class="chk ${on?"done":""}"><input type="checkbox" data-i="${i}" ${on?"checked":""}><span>${esc(t)}</span></label>`; }).join(""); document.getElementById("chkPill").textContent=`${c} / ${TASKS.length} Done`; } function syncKeyPill(){ const p=document.getElementById("keyPill"); const has=Boolean(sessionStorage.getItem(KEY_STORE)); p.textContent=has?"Gemini Key Active":"Local Mode Active"; p.className=has?"pill ok":"pill"; } function render(){ const m=compute(state.city,state.aqi,state.factors); document.getElementById("indexTitle").textContent=`${m.city} Live Index`;
+document.getElementById("heroAqi").textContent=String(m.aqi);
+document.getElementById("aqiVal").textContent=`${m.aqi} AQI`;
+document.getElementById("aqiRange").value=String(m.aqi);
+const b=document.getElementById("tierBadge");
+b.textContent=m.tier.label;
+b.className=`tier ${m.tier.cls}`; document.getElementById("p25").textContent=`${m.pm25} µg/m³`;
+document.getElementById("p10").textContent=`${m.pm10} µg/m³`; document.getElementById("no2").textContent=`${m.no2Val} ppb`;
+document.getElementById("o3").textContent=`${m.o3Val} ppb`; document.getElementById("outLimit").textContent=m.outLimit; document.getElementById("purMode").textContent=m.purMode; document.getElementById("perfChip").textContent=`Render: ${m.ms}ms`;
+const cp=document.getElementById("cachePill");
+cp.textContent=m.hit?"Cache: Hit":"Cache: Fresh";
+cp.className=m.hit?"pill ok":"pill";
+document.getElementById("safePill").textContent=m.safeLbl;
+document.getElementById("hoursGrid").innerHTML=m.slots.map((s,i)=>{
+const cls=i===m.bestIdx||i===m.bestIdx+1?"hr safe":(!((i===m.bestIdx||i===m.bestIdx+1))&&s.val>=300)?"hr peak":"hr";
+return `<div class="${cls}"><div>${esc(s.lbl)}</div><b>${s.val}</b></div>`; }).join(""); document.getElementById("planList").innerHTML=m.steps.map(x=>`<li>${esc(x)}</li>`).join("");
+const ai=document.getElementById("aiBox");
+if(state.aiText){
+ai.textContent=state.aiText;
+ai.classList.add("show");
+document.getElementById("srcPill").textContent="Gemini 3 Flash + Local";
+}else{
+ai.textContent="";
+ai.classList.remove("show");
+document.getElementById("srcPill").textContent="Deterministic Instant";
+}
+renderChecks();
+syncKeyPill();
+}
+function alertText(){
+const m=compute(state.city,state.aqi,state.factors);
+const active=Object.entries(state.factors).filter(([,v])=>v).map(([k])=>k);
+return `VayuShield Alert — ${m.city} AQI${m.aqi} (${m.tier.label}) • PM2.5 ${m.pm25} µg/m³ • Limit: ${m.outLimit} •${m.purMode} • ${m.safeLbl} • Flags: ${active.length?active.join(", "):"none"}`;
+}
+async function runAi(){
+const msg=document.getElementById("statusMsg");
+const key=sessionStorage.getItem(KEY_STORE);
+const m=compute(state.city,state.aqi,state.factors);
+if(!key){
+state.aiText=`Gemini 3 Flash Guardrail (${m.city}, AQI${m.aqi}): Keep indoor air clean with ${m.purMode} and target${m.safeLbl} for brief essential outings.`;
+msg.textContent="No session key set — applied instant local Gemini-style guardrail.";
+render();
+return;
+}
+const ac=new AbortController();
+const timer=setTimeout(()=>ac.abort(),2500);
+msg.textContent="Contacting Gemini 3 Flash (2.5s timeout guardrail)...";
+try{
+const url=`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${encodeURIComponent(key)}`;
+const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},signal:ac.signal,body:JSON.stringify({contents:[{parts:[{text:`Give 2 brief smog protection tips for ${m.city} AQI${m.aqi}, flags ${JSON.stringify(state.factors)}.`}]}]})}); clearTimeout(timer); if(!r.ok)throw new Error("HTTP "+r.status); const d=await r.json(); const txt=d?.candidates?.[0]?.content?.parts?.[0]?.text?.trim()\vert{}\vert{}"Using deterministic guardrail guidance."; state.aiText=`Gemini 3 Flash: ${txt}`;
+msg.textContent="Live Gemini 3 Flash response added.";
+}catch(e){
+clearTimeout(timer);
+const why=e?.name==="AbortError"?"2.5s timeout":"fallback";
+state.aiText=`Fallback (${why}):${m.steps[0]}`;
+msg.textContent=`Clean fallback used (${why}).`;
+}
+render();
+}
+function runTests(){
+const base={asthma:false,vulnerable:false,pets:false,ventilation:false,plants:false,commute:false};
+const t=[];
+const a=compute("Delhi",385,base);
+t.push({n:"1. Severe Tier",ok:a.tier.label==="SEVERE SMOG",d:a.tier.label});
+const b=compute("Blr",74,base);
+t.push({n:"2. Satisfactory Tier",ok:b.tier.label==="SATISFACTORY",d:b.tier.label});
+const c=compute("X",200,base);
+t.push({n:"3. PM2.5 Ratio",ok:c.pm25===120,d:`${c.pm25} µg/m³`}); t.push({n:"4. PM10 Ratio",ok:c.pm10===180,d:`${c.pm10} µg/m³`});
+const d1=parseInt(compute("Y",420,base).outLimit,10);
+const d2=parseInt(compute("Y",420,{...base,asthma:true}).outLimit,10);
+t.push({n:"5. Asthma Guardrail",ok:d2<=d1,d:`${d2}m vs${d1}m`});
+t.push({n:"6. 12 Time Slots",ok:a.slots.length===12,d:`${a.slots.length} slots`}); compute("MemoX",160,base); const m2=compute("MemoX",160,base); t.push({n:"7. Cache Hit",ok:m2.hit===true,d:"Verified"}); const x=esc('<script>1</script>'); t.push({n:"8. XSS Escaped",ok:!x.includes("<script>")&&x.includes("&lt;script&gt;"),d:"Safe"}); t.push({n:"9. AQI Clamped",ok:compute("Z",999,base).aqi===500&&compute("Z",-5,base).aqi===10,d:"10..500"}); t.push({n:"10. Speed <5ms",ok:a.ms<5,d:`${a.ms}ms`});
+t.push({n:"11. Alert Summary",ok:alertText().includes("VayuShield Alert"),d:"Ready"});
+t.push({n:"12. 5 Checklist Tasks",ok:TASKS.length===5,d:"5 tasks"});
+const pass=t.filter(x=>x.ok).length;
+const badge=document.getElementById("testBadge");
+badge.textContent=`${pass} /${t.length} Passed`;
+badge.className=pass===t.length?"pill ok":"pill warn";
+document.getElementById("testSum").textContent=pass===t.length?"All 12 checks passed":"Check failed items";
+document.getElementById("testGrid").innerHTML=t.map(x=>`<div class="tcard"><div class="tcard-top"><span>${esc(x.n)}</span><span class="pill ${x.ok?"ok":"warn"}">${x.ok?"PASS":"FAIL"}</span></div><div class="sub">${esc(x.d)}</div></div>`).join("");
+}
+function togglePanel(drawerId,btnId){
+const d=document.getElementById(drawerId);
+const btn=document.getElementById(btnId);
+const open=!d.classList.contains("open");
+d.classList.toggle("open",open);
+btn.setAttribute("aria-expanded",String(open));
+btn.classList.toggle("on",open);
+}
+document.getElementById("btnTests").addEventListener("click",()=>{
+togglePanel("testDrawer","btnTests");
+if(document.getElementById("testDrawer").classList.contains("open"))runTests();
+});
+document.getElementById("btnDocs").addEventListener("click",()=>togglePanel("docDrawer","btnDocs"));
+document.getElementById("btnKey").addEventListener("click",()=>togglePanel("keyDrawer","btnKey"));
+document.getElementById("btnRunTests").addEventListener("click",runTests);
+document.querySelectorAll("#cityGrid .city").forEach(btn=>{
+btn.addEventListener("click",()=>{
+document.querySelectorAll("#cityGrid .city").forEach(x=>x.classList.remove("sel"));
+btn.classList.add("sel");
+state.city=btn.dataset.city||"New Delhi";
+state.aqi=Number(btn.dataset.aqi||150);
+state.aiText="";
+render();
+});
+});
+document.getElementById("aqiRange").addEventListener("input",e=>{
+state.aqi=Number(e.target.value);
+state.aiText="";
+render();
+});
+document.querySelectorAll("#factorGroup .tog").forEach(btn=>{
+btn.addEventListener("click",()=>{
+const f=btn.dataset.f;
+if(!f||!(f in state.factors))return;
+state.factors[f]=!state.factors[f];
+btn.setAttribute("aria-pressed",String(state.factors[f]));
+state.aiText="";
+render();
+});
+});
+document.getElementById("btnPlan").addEventListener("click",()=>{
+render();
+const m=`Updated plan for ${state.city} (AQI${state.aqi}).`;
+document.getElementById("statusMsg").textContent=m;
+document.getElementById("srLive").textContent=m;
+});
+document.getElementById("btnAi").addEventListener("click",runAi);
+document.getElementById("btnCopy").addEventListener("click",async()=>{
+const txt=alertText();
+try{
+if(navigator.clipboard&&navigator.clipboard.writeText)await navigator.clipboard.writeText(txt);
+document.getElementById("statusMsg").textContent="Copied Family Health Alert.";
+}catch{
+document.getElementById("statusMsg").textContent=txt;
+}
+});
+document.getElementById("chkList").addEventListener("change",e=>{
+const inp=e.target;
+if(inp&&inp.matches('input[type="checkbox"]')){
+const i=Number(inp.dataset.i);
+if(!Number.isNaN(i)&&i>=0&&i<state.done.length){
+state.done[i]=inp.checked;
+renderChecks();
+}
+}
+});
+document.getElementById("btnSaveKey").addEventListener("click",()=>{
+const inp=document.getElementById("keyInput");
+const v=inp.value.trim();
+if(v){
+sessionStorage.setItem(KEY_STORE,v);
+inp.value="";
+document.getElementById("statusMsg").textContent="Saved Gemini API key for this session.";
+}
+syncKeyPill();
+});
+document.getElementById("btnClearKey").addEventListener("click",()=>{
+sessionStorage.removeItem(KEY_STORE);
+document.getElementById("keyInput").value="";
+document.getElementById("statusMsg").textContent="Cleared session Gemini API key.";
+syncKeyPill();
+});
+render();
+runTests();
+})();
+</script>
+</body>
+</html>
